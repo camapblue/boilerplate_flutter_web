@@ -12,9 +12,8 @@ while getopts ":a:e:" opt; do
 done
 
 if [ ! -z "$env" ]; then
-  printf "Env now: $env"
+  printf "Env now: $env\n"
   ENV=$env make $action
 else
-  printf "WTF Env now: $env"
   flutter run -d chrome
 fi
