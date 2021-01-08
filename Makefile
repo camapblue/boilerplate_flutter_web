@@ -8,11 +8,16 @@ setup-env:
 deploy:
 	make setup-env
 	firebase use $(ENV)
-	flutter build web --dart-define env="$$(echo $$(cat env.json | jq @json))"
-	firebase deploy
+	# configs := $$(echo $$(cat env.json | jq @json))
+	# $(eval configs=$(echo $$(cat env.json | jq @json)))
+	$(eval configs=$($$(echo $$(cat env.json | jq @json))))
+	echo $(configs)
+	# @echo "hello world"
+	# flutter build web --dart-define env=$(cons)
+	# firebase deploy
 
 run:
 	make setup-env
 	firebase use $(ENV)
-	flutter run --dart-define env=$$(echo $$(cat env.json | jq @json))
+	flutter run --dart-define env=$$(echo $$(cat env.json | jq @json)) -d chrome
 	
