@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:common/common.dart';
 
 class Configs {
@@ -8,16 +6,19 @@ class Configs {
   factory Configs() {
     if (_singleton._configs == null) {
       try {
-        final env =
-            const String.fromEnvironment('env').replaceAll('\\"', '\"');
-        _singleton._configs =
-            json.decode(env.substring(0, env.length - 1).substring(1));
+        _singleton._configs = {};
+        const String.fromEnvironment('env')
+          .split('|')
+          .forEach((comp) {
+          if (comp.isNotEmpty) {
+            final vars = comp.split('=');
+            _singleton._configs[vars[0]] = vars[1];
+          }
+        });
       } catch (e) {
         log.error('Error >> $e');
         _singleton._configs = {};
       }
-
-      
     }
     return _singleton;
   }
