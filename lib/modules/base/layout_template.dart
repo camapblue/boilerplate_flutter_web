@@ -1,5 +1,6 @@
 import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:boilerplate_flutter_web/global/global.dart';
+import 'package:boilerplate_flutter_web/modules/base/navigation_menu/navigation_menu.dart';
 import 'package:boilerplate_flutter_web/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -21,16 +22,23 @@ class LayoutTemplate extends StatelessWidget {
             children: <Widget>[
               const NavigationBar(),
               Expanded(
-                child: Container(
-                  padding: sizingInformation.isMobile
-                      ? const EdgeInsets.all(0)
-                      : const EdgeInsets.all(16),
-                  color: AppColors.light,
-                  child: Navigator(
-                    key: AppNavigator().navigatorKey,
-                    onGenerateRoute: Routes.generateRoute,
-                    initialRoute: Pages.home,
-                  ),
+                child: Row(
+                  children: [
+                    if (!sizingInformation.isMobile) const NavigationMenu(),
+                    Expanded(
+                      child: Container(
+                        padding: sizingInformation.isMobile
+                            ? const EdgeInsets.all(0)
+                            : const EdgeInsets.all(16),
+                        color: AppColors.light,
+                        child: Navigator(
+                          key: AppNavigator().navigatorKey,
+                          onGenerateRoute: Routes.generateRoute,
+                          initialRoute: Pages.home,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
