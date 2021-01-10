@@ -8,7 +8,7 @@ import 'blocs/blocs.dart';
 
 Future<void> main() async {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-
+  
   runApp(MyApp());
 }
 

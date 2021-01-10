@@ -19,12 +19,18 @@ class LayoutTemplate extends StatelessWidget {
         body: CenteredView(
           child: Column(
             children: <Widget>[
-              NavigationBar(),
+              const NavigationBar(),
               Expanded(
-                child: Navigator(
-                  key: AppNavigator().navigatorKey,
-                  onGenerateRoute: Routes.generateRoute,
-                  initialRoute: Pages.home,
+                child: Container(
+                  padding: sizingInformation.isMobile
+                      ? const EdgeInsets.all(0)
+                      : const EdgeInsets.all(16),
+                  color: AppColors.light,
+                  child: Navigator(
+                    key: AppNavigator().navigatorKey,
+                    onGenerateRoute: Routes.generateRoute,
+                    initialRoute: Pages.home,
+                  ),
                 ),
               ),
             ],

@@ -1,3 +1,4 @@
+import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatelessWidget {
@@ -5,11 +6,10 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: const Center(
-          child: Text('Home view'),
-        ),
+    return Container(
+      color: AppColors.white,
+      child: const Center(
+        child: Text('Home view'),
       ),
     );
   }

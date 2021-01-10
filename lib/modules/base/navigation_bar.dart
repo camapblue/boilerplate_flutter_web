@@ -1,4 +1,8 @@
+import 'package:boilerplate_flutter_web/constants/constants.dart';
+import 'package:boilerplate_flutter_web/theme/theme.dart';
+import 'package:boilerplate_flutter_web/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class _NavBarItem extends StatelessWidget {
   final String title;
@@ -16,18 +20,55 @@ class _NavBarItem extends StatelessWidget {
   }
 }
 
-class NavigationBar extends StatelessWidget {
+class _NavigationBarMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: 64,
+      color: greenColorLight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           SizedBox(
-            height: 80,
-            width: 150,
-            child: Image.asset('images/logo.png'),
+            height: 48,
+            width: 64,
+            child: AppImage(image: AppImagesAsset.logo),
+          ),
+          Text(
+            'Boilerplate',
+            style: Theme.of(context).primaryBold.copyWith(
+                  color: AppColors.dark,
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NavigationBarTabletDesktop extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      color: greenColorLight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
+            children: [
+              SizedBox(
+                height: 64,
+                width: 100,
+                child: AppImage(image: AppImagesAsset.logo),
+              ),
+              Text(
+                'Boilerplate',
+                style: Theme.of(context).primaryBold.copyWith(
+                      color: AppColors.dark,
+                    ),
+              ),
+            ],
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -41,6 +82,18 @@ class NavigationBar extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class NavigationBar extends StatelessWidget {
+  const NavigationBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenTypeLayout(
+      mobile: _NavigationBarMobile(),
+      tablet: _NavigationBarTabletDesktop(),
     );
   }
 }

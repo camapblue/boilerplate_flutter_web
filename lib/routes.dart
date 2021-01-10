@@ -20,6 +20,7 @@ class Routes {
 
   static PageRoute _getPageRoute(Widget child) {
     return MaterialPageRoute(
+      fullscreenDialog: true,
       builder: (context) => child,
     );
   }
