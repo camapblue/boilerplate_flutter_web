@@ -13,6 +13,6 @@ deploy:
 
 run:
 	make setup-env
-	firebase use $(E NV)
+	firebase use $(ENV)
 	flutter run --dart-define env=$$(echo $$(cat .env | tr '\n' '|')) -d chrome
 	

@@ -13,7 +13,11 @@ done
 
 if [ ! -z "$env" ]; then
   printf "Env now: $env\n"
-  ENV=$env make $action
+  if [ ! -z "$action" ]; then
+    ENV=$env make $action
+  else 
+    ENV=$env make run
+  fi
 else
   flutter run -d chrome
 fi
