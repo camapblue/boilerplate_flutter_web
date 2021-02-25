@@ -4,7 +4,7 @@ Boilerplate Flutter Single Web Page
 
 ## Getting Started
 
-This project is a mobile app of Boilerplate that building by Flutter.
+This project is a Boilerplate of Web App that building by Flutter.
 
 ## Awareness
 - Always think about the million users are using this app, so it must be the **World Class** app
@@ -233,3 +233,9 @@ For the next run with qc environment, it can be run normally with Flutter comman
   6. trace: *for tracking in order to identify bugs, do not keep it when bug is resolved*
 - The logging level for each environment will be set in .env files
 - The Log class is a singleton and be able to get from singleton instance of Common class
+
+## Donations
+
+Please coffee for me if it's helpful for you. Thanks ^_^
+
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/lequangdaoitm/10)
