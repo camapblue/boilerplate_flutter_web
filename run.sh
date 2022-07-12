@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
-while getopts ":a:e:" opt; do
+while getopts ":e:d:r:" opt; do
   case $opt in
-    a) action="$OPTARG"
-    ;;
     e) env="$OPTARG"
+    ;;
+    d) device="$OPTARG"
+    ;;
+    r) release="$OPTARG"
     ;;
     \?) echo "Invalid option -$OPTARG" >&2
     ;;
@@ -12,12 +14,27 @@ while getopts ":a:e:" opt; do
 done
 
 if [ ! -z "$env" ]; then
-  printf "Env now: $env\n"
-  if [ ! -z "$action" ]; then
-    ENV=$env make $action
-  else 
-    ENV=$env make run
+  printf "Env now: $env"
+  cp -a environments/$env/.env .env
+
+  printf "\nFinish\n"
+  if [ ! -z "$device" ]; then
+    printf "Device : $device"
+    if [ ! -z "$release" ]; then
+      printf "Release : $release"
+      flutter run --flavor $env -d $device --release
+    else 
+      flutter run --flavor $env -d $device
+    fi
+  else
+    if [ ! -z "$release" ]; then
+      printf "Release : $release"
+      flutter run --flavor $env --release
+    else 
+      flutter run --flavor $env
+    fi
   fi
 else
-  flutter run -d chrome
+  flutter run --flavor dev
 fi
+

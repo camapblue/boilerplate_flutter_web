@@ -10,12 +10,10 @@ analyzer:
     avoid_print: error
   exclude:
     # exclude files
-    - lib/common/i18n
+    - lib/common/i18n    
     - storybook/**
     - environments/**
     - test_data/**
-  enable-experiment:
-    - extension-methods
 
 linter:
   rules:
@@ -27,7 +25,6 @@ linter:
     - void_checks
     - annotate_overrides
     - prefer_single_quotes
-    - avoid_as
     - avoid_empty_else
     - avoid_print
     - avoid_field_initializers_in_const_classes

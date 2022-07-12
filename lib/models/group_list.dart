@@ -8,7 +8,6 @@ extension GroupList on List<Group> {
     var total = 0;
     for (final group in this) {
       if (isListGroup(group.list.runtimeType.toString())) {
-        //ignore: avoid_as
         total += GroupList(group.list as List<Group>).totalItem();
       } else {
         total += group.length;

@@ -1,3 +1,5 @@
+import 'package:boilerplate_flutter_web/blocs/mixin/mixin.dart';
+import 'package:common/common.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
@@ -5,15 +7,15 @@ import 'package:bloc/bloc.dart';
 import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:boilerplate_flutter_web/blocs/blocs.dart';
 
-import 'broadcast.dart';
-import 'event_bus.dart';
+import 'package:repository/repository.dart';
 
 abstract class BaseBloc<E extends Object, S extends Equatable>
-    extends Bloc<E, S> {
+    extends Bloc<E, S> with MessageShowing {
   final Key key;
   final Key closeWithBlocKey;
 
-  BaseBloc(this.key, {this.closeWithBlocKey}) : super() {
+  BaseBloc(this.key, {@required S initialState, this.closeWithBlocKey})
+      : super(initialState) {
     otherBlocsSubscription();
   }
 
@@ -30,6 +32,28 @@ abstract class BaseBloc<E extends Object, S extends Equatable>
     otherBlocsUnsubscription();
 
     await super.close();
+  }
+
+  void showAppError(String messageKey, {List<dynamic> params = const []}) {
+    EventBus().event<ShowMessageBloc>(
+      Keys.Blocs.showMessageBloc,
+      ErrorMessageShowed(
+        messageKey,
+        params: params,
+      ),
+    );
+  }
+
+  void handleException(Exception e) {
+    if (e is ApiException) {
+      log.error('Api Error >> $e');
+      showAppError(e.errorMessage);
+    } else if (e is AppException) {
+      log.error('App Error >> $e');
+      showAppError(e.errorMessage);
+    } else {
+      showAppError(e.toString());
+    }
   }
 
   void otherBlocsSubscription() {}

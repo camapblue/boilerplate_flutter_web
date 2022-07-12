@@ -14,7 +14,7 @@ class MenuBarStory extends Story {
     'Noodle',
     'Baby',
     'Clothes',
-    'Jewery'
+    'Jewelry'
   ];
 
   @override
@@ -23,11 +23,10 @@ class MenuBarStory extends Story {
       WidgetMap(
         title: 'Menu Bar - Text',
         builder: (context) {
-          final screenWidth = MediaQuery.of(context).size.width;
-          int pageIndex = 0;
-          String pageTitle = data[pageIndex];
+          var pageIndex = 0;
+          var pageTitle = data[pageIndex];
           Function renderFunction = () {};
-          final MenuBarController menuController = MenuBarController();
+          final menuController = MenuBarController();
 
           return Container(
             color: lightColor,

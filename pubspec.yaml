@@ -31,9 +31,9 @@ dependencies:
     path: ./repository
   common:
     path: ./common
-  rxdart: ^0.23.1
+  rxdart: ^0.26.0
   equatable: ^1.2.5
-  flutter_bloc: ^3.1.0
+  flutter_bloc: ^7.0.1
   sprintf: ^4.0.2
   url_launcher: ^5.4.1 # Launching a URL in the mobile platform
   connectivity: ^0.4.6+2
@@ -41,6 +41,7 @@ dependencies:
   loadmore: ^1.0.4
   responsive_builder: ^0.3.0
   scrollable_positioned_list: ^0.1.8
+  flutter_svg: ^0.22.0
 
 dev_dependencies:
   flutter_test:

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:boilerplate_flutter_web/modules/base/navigation_drawer/navigation_drawer.dart';
 import 'package:boilerplate_flutter_web/modules/base/centered_view.dart';
-import 'package:boilerplate_flutter_web/modules/base/navigation_bar.dart';
+import 'package:boilerplate_flutter_web/modules/base/page_navigation_bar.dart';
 
 class LayoutTemplate extends StatelessWidget {
   const LayoutTemplate({Key key}) : super(key: key);
@@ -19,7 +19,7 @@ class LayoutTemplate extends StatelessWidget {
         body: CenteredView(
           child: Column(
             children: <Widget>[
-              const NavigationBar(),
+              const PageNavigationBar(),
               Expanded(
                 child: Container(
                   padding: sizingInformation.isMobile

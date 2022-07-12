@@ -14,8 +14,9 @@ class Routes {
     switch (settings.name) {
       case Pages.home:
         return _getPageRoute(const HomeView(), settings);
-      case Pages.league:
+      case Pages.league: {
         return _getPageRoute(const LeagueView(), settings);
+      }
       default:
         return _getPageRoute(const HomeView(), settings);
     }

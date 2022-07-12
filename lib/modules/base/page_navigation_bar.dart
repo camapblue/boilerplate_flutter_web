@@ -86,8 +86,8 @@ class _NavigationBarTabletDesktop extends StatelessWidget {
   }
 }
 
-class NavigationBar extends StatelessWidget {
-  const NavigationBar();
+class PageNavigationBar extends StatelessWidget {
+  const PageNavigationBar();
 
   @override
   Widget build(BuildContext context) {

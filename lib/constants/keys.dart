@@ -16,6 +16,7 @@ class _Blocs {
   // One instance at the given time
   final Key noneDisposeBloc = const Key('none_dispose_bloc');
   final Key forceToDisposeBloc = const Key('force_to_dispose_bloc');
+  final Key showMessageBloc = const Key('show_message_bloc');
 
   final Key connectivityBloc = const Key('connectivity_bloc');
 }

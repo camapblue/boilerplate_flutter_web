@@ -13,10 +13,10 @@ if [ ! -z "$env" ]; then
   printf "Env now: $env"
   cp -a environments/$env/.env .env
   
-  flutter run -t storybook/lib/main.dart -d chrome
+  flutter run -t storybook/lib/main.dart -d chrome 
 else
-  printf "Env now: dev"
+  printf "Default Env is dev"
   cp -a environments/dev/.env .env
   
-  flutter run -t storybook/lib/main.dart -d chrome --enable-experiment non-nullable
+  flutter run -t storybook/lib/main.dart -d chrome --no-sound-null-safety
 fi

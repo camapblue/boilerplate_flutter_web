@@ -1,13 +1,12 @@
 import 'package:boilerplate_flutter_web/modules/base/layout_template.dart';
 import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:boilerplate_flutter_web/theme/theme.dart';
 import 'blocs/blocs.dart';
 
 Future<void> main() async {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   
   runApp(MyApp());
 }
