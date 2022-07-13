@@ -1,0 +1,26 @@
+[
+  {
+    "id": "5c978053f4069e51777a6a54",
+    "name": "Rachel Cheng",
+    "email": "rachel.cheng@gmail.com",
+    "role": "SUPER_ADMIN"
+  },
+  {
+    "id": "5deef2814655d2c924d247a1",
+    "name": "Achilles Hero",
+    "email": "achilles.hero@gmail.com",
+    "role": "ADMIN"
+  },
+  {
+    "id": "5deef2814655d2c924d247a1",
+    "name": "Robin Hood",
+    "email": "robin.hood@gmail.com",
+    "role": "EMPLOYEE"
+  },
+  {
+    "id": "5deef28146f5d2c924d247a1",
+    "name": "Hiro Nakata",
+    "email": "hiro.nakata@gmail.com",
+    "role": "EMPLOYEE"
+  }
+]

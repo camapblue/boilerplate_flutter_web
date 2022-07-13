@@ -1,7 +1,9 @@
 import 'package:boilerplate_flutter_web/constants/constants.dart';
+import 'package:boilerplate_flutter_web/global/global.dart';
 import 'package:boilerplate_flutter_web/modules/home/home_view.dart';
 import 'package:boilerplate_flutter_web/modules/league/league_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Routes {
   static Map<String, WidgetBuilder> allRoutes(BuildContext context) {
@@ -13,10 +15,15 @@ class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Pages.home:
-        return _getPageRoute(const HomeView(), settings);
-      case Pages.league: {
-        return _getPageRoute(const LeagueView(), settings);
-      }
+        return _getPageRoute(
+            MultiBlocProvider(providers: [
+              Provider().BlocProvider.userList(Keys.Blocs.userListBloc),
+            ], child: const HomeView()),
+            settings);
+      case Pages.league:
+        {
+          return _getPageRoute(const LeagueView(), settings);
+        }
       default:
         return _getPageRoute(const HomeView(), settings);
     }
@@ -24,10 +31,10 @@ class Routes {
 
   static PageRoute _getPageRoute(Widget child, RouteSettings settings) {
     return _FadeRouteTransition(
-        pageBuilder: (context) => child,
-        settings: settings,
-        duration: const Duration(milliseconds: 250),
-      );
+      pageBuilder: (context) => child,
+      settings: settings,
+      duration: const Duration(milliseconds: 250),
+    );
   }
 }
 

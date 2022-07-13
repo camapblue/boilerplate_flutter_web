@@ -1,13 +1,15 @@
+import 'package:boilerplate_flutter_web/global/global.dart';
 import 'package:boilerplate_flutter_web/modules/base/layout_template.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:boilerplate_flutter_web/theme/theme.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'blocs/blocs.dart';
 
 Future<void> main() async {
   Bloc.observer = SimpleBlocObserver();
-  
+
   runApp(MyApp());
 }
 
@@ -27,11 +29,27 @@ class _MyAppState extends State<MyApp> {
           create: (_) =>
               ConnectivityBloc.instance()..add(ConnectivityChecked()),
         ),
+        BlocProvider<ThemeBloc>(create: (_) => ThemeBloc.instance())
       ],
-      child: MaterialApp(
-        title: 'Boilerplate Flutter Web',
-        theme: loadTheme(),
-        home: const LayoutTemplate(),
+      child: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (_, state) {
+          return MaterialApp(
+            title: 'Boilerplate Flutter Web',
+            localizationsDelegates: const [
+              SLocalizationsDelegate(),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('vi'),
+              Locale('en'),
+            ],
+            locale: const Locale('en'),
+            theme: loadTheme(theme: state.theme),
+            home: const LayoutTemplate(),
+          );
+        },
       ),
     );
   }

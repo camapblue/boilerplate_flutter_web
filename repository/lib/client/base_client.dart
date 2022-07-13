@@ -1,16 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart';
+import 'package:repository/repository.dart';
 import 'package:retry/retry.dart';
-import 'package:repository/exception/exception.dart';
 
 abstract class BaseClient {
   Client _client;
   String _host;
+  String _authorization;
 
-  BaseClient(String host, {Client client}) {
+  BaseClient(String host, {Client client, String authorization}) {
     _client = client ?? Client();
     _host = host;
+    _authorization = authorization;
   }
 
   Uri _getParsedUrl(String path) {
@@ -47,6 +49,10 @@ abstract class BaseClient {
     dynamic responseJson;
     try {
       var request = Request(method, _getParsedUrl(path));
+      final token = _authorization ?? Repository().accessToken;
+      if (token != null) {
+        request.headers['Authorization'] = 'Bearer $token';
+      }
 
       if (data != null) {
         request.body = jsonEncode(data);
@@ -91,7 +97,7 @@ abstract class BaseClient {
         throw ServerErrorException(response.body.toString());
       default:
         throw FetchDataException(
-            '''Error occured while Communication with Server with StatusCode : ${response.statusCode}''');
+            '''Error occurred while Communication with Server with StatusCode : ${response.statusCode}''');
     }
   }
 

@@ -26,5 +26,7 @@ class Configs {
   Configs._internal();
   dynamic _configs;
 
+  bool get isDev => (_configs['ENV'] ?? 'DEV') == 'DEV';
+
   String get baseURL => _configs['BASE_URL'] ?? 'https://default.com/';
 }

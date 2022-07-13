@@ -19,4 +19,8 @@ class _Blocs {
   final Key showMessageBloc = const Key('show_message_bloc');
 
   final Key connectivityBloc = const Key('connectivity_bloc');
+  final Key themeBloc = const Key('theme_bloc');
+
+  // List
+  final Key userListBloc = const Key('user_list_bloc');
 }

@@ -13,7 +13,7 @@ dependencies:
   meta: ^1.2.3
   logger: ^0.9.4
   sprintf: ^4.0.2
-  intl: ^0.16.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
