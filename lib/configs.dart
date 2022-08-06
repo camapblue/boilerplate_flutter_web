@@ -27,4 +27,7 @@ class Configs {
   dynamic _configs;
 
   String get baseURL => _configs['BASE_URL'] ?? 'https://default.com/';
+
+  List<String> get supportedLanguages =>
+      (_configs['SUPPORTED_LANGUAGES'] ?? 'en,fr').split(',').toList();
 }

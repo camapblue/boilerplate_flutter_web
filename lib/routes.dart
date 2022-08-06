@@ -40,20 +40,19 @@ class Routes {
 
 class _FadeRouteTransition<T> extends PageRoute<T> {
   final WidgetBuilder pageBuilder;
-  final Duration duration;
+  final Duration? duration;
 
   _FadeRouteTransition({
-    @required this.pageBuilder,
-    @required RouteSettings settings,
+    required this.pageBuilder,
+    required RouteSettings settings,
     this.duration,
-  })  : assert(pageBuilder != null, 'Must provide page builder!'),
-        super(settings: settings);
+  }) : super(settings: settings);
 
   @override
   Color get barrierColor => Colors.black.withAlpha(1);
 
   @override
-  String get barrierLabel => null;
+  String? get barrierLabel => null;
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,

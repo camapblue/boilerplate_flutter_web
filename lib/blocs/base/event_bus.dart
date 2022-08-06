@@ -10,7 +10,7 @@ class RetryEvent {
   final Key key;
   final Object event;
 
-  RetryEvent({this.key, this.event});
+  RetryEvent({required this.key, required this.event});
 }
 
 class EventBus {
@@ -20,10 +20,10 @@ class EventBus {
     return _singleton;
   }
 
-  List<BaseBloc> _blocs;
-  List<Broadcast> _broadcasts;
+  List<BaseBloc> _blocs = [];
+  List<Broadcast> _broadcasts = [];
 
-  List<RetryEvent> _retryEvents;
+  List<RetryEvent> _retryEvents = [];
 
   EventBus._internal() {
     _blocs = [];
@@ -33,17 +33,15 @@ class EventBus {
 
   T newBloc<T extends BaseBloc>(Key key) {
     final found = _blocs.indexWhere((b) => b.key == key);
-    if (found >= 0) {
-      return _blocs[found];
+    if (found >= 0 && _blocs[found] is T) {
+      return _blocs[found] as T;
     }
 
     try {
-      final T newInstance = blocConstructors[T](key);
-      assert(newInstance is BaseBloc,
-          'New instance of bloc should be inherited BaseBloc');
+      final T newInstance = blocConstructors[T]!(key) as T;
       log.trace('New Bloc is created with key = $key');
       _blocs.add(newInstance);
-      if (newInstance.subscribes() != null) {
+      if (newInstance.subscribes().isNotEmpty) {
         _broadcasts.addAll(newInstance.subscribes());
       }
       _retryEvent<T>(key);
@@ -56,18 +54,15 @@ class EventBus {
 
   T newBlocWithConstructor<T extends BaseBloc>(Key key, Function constructor) {
     final found = _blocs.indexWhere((b) => b.key == key);
-    if (found >= 0) {
-      return _blocs[found];
+    if (found >= 0 && _blocs[found] is T) {
+      return _blocs[found] as T;
     }
 
     try {
       final T newInstance = constructor();
       log.trace('New Bloc is created with key = $key');
-      assert(newInstance is BaseBloc,
-          'New instance of bloc should be inherited BaseBloc');
-
       _blocs.add(newInstance);
-      if (newInstance.subscribes() != null) {
+      if (newInstance.subscribes().isNotEmpty) {
         _broadcasts.addAll(newInstance.subscribes());
       }
       _retryEvent<T>(key);
@@ -78,10 +73,10 @@ class EventBus {
     throw Exception('Something went wrong in creating bloc with key $key');
   }
 
-  T blocFromKey<T extends BaseBloc>(Key key) {
+  T? blocFromKey<T extends BaseBloc>(Key key) {
     final found = _blocs.indexWhere((b) => b.key == key);
     if (found >= 0 && _blocs[found] is T) {
-      return _blocs[found];
+      return _blocs[found] as T;
     } else {
       log.error('Cannot found bloc with key $key');
     }
@@ -89,7 +84,7 @@ class EventBus {
   }
 
   void event<T extends BaseBloc>(Key key, Object event,
-      {bool retryLater = false, Duration delay}) {
+      {bool retryLater = false, Duration? delay}) {
     try {
       final found = _blocs.indexWhere((b) => b.key == key);
       if (found >= 0 && _blocs[found] is T) {
@@ -143,7 +138,7 @@ class EventBus {
   }
 
   // support methods
-  void cleanUp({Key parentKey}) {
+  void cleanUp({Key? parentKey}) {
     final removedKeys = <Key>[];
     final closeKey = parentKey ?? Keys.Blocs.noneDisposeBloc;
     _blocs.removeWhere((b) {

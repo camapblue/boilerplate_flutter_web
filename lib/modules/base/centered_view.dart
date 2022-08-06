@@ -3,7 +3,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 
 class _CenteredViewMobile extends StatelessWidget {
   final Widget child;
-  const _CenteredViewMobile({Key key, this.child}) : super(key: key);
+  const _CenteredViewMobile({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,8 @@ class _CenteredViewMobile extends StatelessWidget {
 
 class _CenteredViewTabletDesktop extends StatelessWidget {
   final Widget child;
-  const _CenteredViewTabletDesktop({Key key, this.child}) : super(key: key);
+  const _CenteredViewTabletDesktop({Key? key, required this.child})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class _CenteredViewTabletDesktop extends StatelessWidget {
 
 class CenteredView extends StatelessWidget {
   final Widget child;
-  const CenteredView({Key key, this.child}) : super(key: key);
+  const CenteredView({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

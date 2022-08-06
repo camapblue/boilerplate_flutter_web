@@ -1,44 +1,40 @@
-import 'package:boilerplate_flutter_web/blocs/blocs.dart';
-import 'package:boilerplate_flutter_web/models/models.dart';
-import 'package:boilerplate_flutter_web/theme/theme.dart';
-import 'package:boilerplate_flutter_web/widgets/load_list/load_more_delegate.dart';
-import 'package:common/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:common/widget.dart';
 import 'package:loadmore/loadmore.dart';
-import 'package:repository/model/model.dart';
+import 'package:boilerplate_flutter_web/blocs/blocs.dart';
+import 'package:boilerplate_flutter_web/models/models.dart';
 
 import 'empty_list.dart';
 import 'error_list.dart';
 import 'keep_alive_list_item.dart';
+import 'load_more_delegate.dart';
 
 typedef ItemSeparatorBuilder = Widget Function(int index);
 
-typedef ListRender<T extends Entity> = Widget Function(List<T> items);
-typedef ItemBuilder<T extends Entity> = Widget Function(T item, int index);
-typedef ItemPlaceholderBuilder<T extends Entity> = Widget Function(T item);
+typedef ListRender<T extends Object> = Widget Function(List<T> items);
+typedef ItemBuilder<T extends Object> = Widget Function(T item, int index);
+typedef ItemPlaceholderBuilder<T extends Object> = Widget Function(T item);
 
 typedef GroupHeaderBuilder = Widget Function(String headerTitle,
-    {Map<String, dynamic> extraData});
-typedef GroupItemBuilder<I extends Entity> = Widget Function(I item,
-    int index);
-typedef GroupItemPlaceholderBuilder<I extends Entity> = Widget Function(I item,
-    int index);
+    {Map<String, dynamic>? extraData});
+typedef GroupItemBuilder<I extends Object> = Widget Function(I item);
+typedef GroupItemPlaceholderBuilder<I extends Object> = Widget Function(I item);
 typedef OnItemRemoved<T extends Object> = void Function(T removedItem);
-typedef OnDataIsReady<T extends Entity> = void Function(
+typedef OnDataIsReady<T extends Object> = void Function(
     List<T> data, bool isRefreshed);
-typedef CompareFunction<T> = int Function(T a, T b);
 
 class LoadListGroupHeader extends StatelessWidget {
   final List<Group> groups;
   final int index;
   final GroupHeaderBuilder builder;
 
-  LoadListGroupHeader({
-    this.groups,
-    this.index,
-    this.builder,
-  });
+  const LoadListGroupHeader({
+    Key? key,
+    required this.groups,
+    required this.index,
+    required this.builder,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,16 +52,17 @@ class LoadListGroupHeader extends StatelessWidget {
 
 class ListItemLayout extends StatefulWidget {
   final Widget child;
-  final Widget placeholder;
+  final Widget? placeholder;
   final Duration duration;
   final bool slideUpAnimation;
 
-  ListItemLayout({
+  const ListItemLayout({
+    Key? key,
     this.placeholder,
-    @override this.child,
+    required this.child,
     this.duration = const Duration(milliseconds: 350),
     this.slideUpAnimation = false,
-  });
+  }) : super(key: key);
 
   @override
   State<ListItemLayout> createState() {
@@ -75,7 +72,7 @@ class ListItemLayout extends StatefulWidget {
 
 class _ListItemLayout extends State<ListItemLayout>
     with SingleTickerProviderStateMixin {
-  AnimationController _animation;
+  AnimationController? _animation;
 
   @override
   void initState() {
@@ -84,7 +81,7 @@ class _ListItemLayout extends State<ListItemLayout>
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (_animation != null) {
         await Future.delayed(const Duration(milliseconds: 350));
-        await _animation.forward();
+        await _animation?.forward();
       }
     });
 
@@ -105,21 +102,21 @@ class _ListItemLayout extends State<ListItemLayout>
   @override
   void dispose() {
     if (_animation != null) {
-      _animation.dispose();
+      _animation?.dispose();
     }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.slideUpAnimation) {
+    if (widget.slideUpAnimation && _animation != null) {
       return SlideTransition(
         position: Tween<Offset>(
           begin: const Offset(0, 1),
           end: const Offset(0, 0),
         ).animate(
           CurvedAnimation(
-            parent: _animation,
+            parent: _animation!,
             curve: Curves.easeInCubic,
           ),
         ),
@@ -127,16 +124,20 @@ class _ListItemLayout extends State<ListItemLayout>
       );
     }
 
-    return FadingWithPlaceholder(
-      placeholder: widget.placeholder,
-      child: widget.child,
-    );
+    if (widget.placeholder != null) {
+      return FadingWithPlaceholder(
+        placeholder: widget.placeholder!,
+        child: widget.child,
+      );
+    }
+    return const SizedBox();
   }
 }
 
-class LoadList<T extends Entity> extends StatefulWidget {
-  LoadList({
-    @required this.blocKey,
+class LoadList<T extends Object> extends StatefulWidget {
+  const LoadList({
+    Key? key,
+    required this.blocKey,
     this.emptyMessage,
     this.listRender,
     this.itemBuilder,
@@ -148,7 +149,7 @@ class LoadList<T extends Entity> extends StatefulWidget {
     this.groupHeaderBuilder,
     this.emptyWidget,
     this.loadingWidget,
-    this.loadingIndicatorColor = whiteColor,
+    this.loadingIndicatorColor = Colors.white,
     this.onDataIsReady,
     this.onShouldRefresh,
     this.padding = EdgeInsets.zero,
@@ -162,31 +163,34 @@ class LoadList<T extends Entity> extends StatefulWidget {
     this.params,
     this.itemFilter,
     this.sort,
+    this.scrollbarEnabled = true,
+    this.needReloadWhenEmpty = false,
   })  : assert(
             listRender != null ||
                 itemBuilder != null ||
                 supportFlatGroup == true,
             'Must provide at least one render.'),
         assert(emptyWidget != null || emptyMessage != null,
-            'Must provide at least one empty case.');
+            'Must provide at least one empty case.'),
+        super(key: key);
 
   final Key blocKey;
-  final String emptyMessage;
-  final ListRender<T> listRender;
-  final ItemBuilder<T> itemBuilder;
-  final OnItemRemoved<T> onItemRemoved;
-  final ItemSeparatorBuilder itemSeparatorBuilder;
-  final ItemPlaceholderBuilder<T> itemPlaceholderBuilder;
+  final String? emptyMessage;
+  final ListRender<T>? listRender;
+  final ItemBuilder<T>? itemBuilder;
+  final OnItemRemoved<T>? onItemRemoved;
+  final ItemSeparatorBuilder? itemSeparatorBuilder;
+  final ItemPlaceholderBuilder<T>? itemPlaceholderBuilder;
 
-  final GroupItemBuilder groupItemBuilder;
-  final GroupItemPlaceholderBuilder groupItemPlaceholderBuilder;
-  final GroupHeaderBuilder groupHeaderBuilder;
+  final GroupItemBuilder? groupItemBuilder;
+  final GroupItemPlaceholderBuilder? groupItemPlaceholderBuilder;
+  final GroupHeaderBuilder? groupHeaderBuilder;
 
-  final OnDataIsReady<T> onDataIsReady;
-  final Widget emptyWidget;
-  final Widget loadingWidget;
+  final OnDataIsReady<T>? onDataIsReady;
+  final Widget? emptyWidget;
+  final Widget? loadingWidget;
   final Color loadingIndicatorColor;
-  final Function onShouldRefresh;
+  final Function? onShouldRefresh;
   final EdgeInsets padding;
   final bool slideUpAnimation;
   final int startingSlideUpIndex;
@@ -195,9 +199,11 @@ class LoadList<T extends Entity> extends StatefulWidget {
   final bool autoStart;
   final bool supportFlatGroup;
   final bool automaticKeepAlives;
-  final Map<String, dynamic> params;
-  final bool Function(T) itemFilter;
-  final CompareFunction sort;
+  final Map<String, dynamic>? params;
+  final bool Function(T)? itemFilter;
+  final int Function(T a, T b)? sort;
+  final bool scrollbarEnabled;
+  final bool needReloadWhenEmpty;
 
   @override
   State<StatefulWidget> createState() {
@@ -205,10 +211,10 @@ class LoadList<T extends Entity> extends StatefulWidget {
   }
 }
 
-class _LoadListState<T extends Entity> extends State<LoadList<T>> {
+class _LoadListState<T extends Object> extends State<LoadList<T>> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
-  LoadMoreDelegate _loadMoreDelegate;
+  LoadMoreDelegate? _loadMoreDelegate;
   bool _isRefresh = false;
   final _scrollController = ScrollController();
   double _previousScrollPosition = 0.0;
@@ -216,10 +222,10 @@ class _LoadListState<T extends Entity> extends State<LoadList<T>> {
 
   List<T> getItems(LoadListState state) {
     if (state is LoadListLoadPageSuccess) {
-      var items = state.items;
+      var items = state.items as List<T>;
 
       if (widget.itemFilter != null) {
-        items = items.where((element) => widget.itemFilter(element)).toList();
+        items = items.where((element) => widget.itemFilter!(element)).toList();
       }
 
       if (widget.sort != null) {
@@ -247,7 +253,7 @@ class _LoadListState<T extends Entity> extends State<LoadList<T>> {
       if (loadListBloc != null) {
         final state = loadListBloc.state;
         if (state is LoadListLoadPageSuccess && widget.onDataIsReady != null) {
-          widget.onDataIsReady(getItems(state), _isRefresh);
+          widget.onDataIsReady!(state.items as List<T>, _isRefresh);
         } else if (state is LoadListInitial && widget.autoStart) {
           loadListBloc.start(params: widget.params);
         }
@@ -270,7 +276,7 @@ class _LoadListState<T extends Entity> extends State<LoadList<T>> {
 
   Future<void> _refresh() async {
     if (widget.onShouldRefresh != null) {
-      widget.onShouldRefresh();
+      widget.onShouldRefresh!();
     }
     _isRefresh = true;
     EventBus().event<LoadListBloc>(
@@ -280,7 +286,7 @@ class _LoadListState<T extends Entity> extends State<LoadList<T>> {
   }
 
   Widget _buildLoadList(List<Object> items) {
-    Widget listView;
+    Widget listView = const SizedBox();
     if (widget.listRender == null) {
       if (widget.supportFlatGroup) {
         assert(
@@ -288,39 +294,39 @@ class _LoadListState<T extends Entity> extends State<LoadList<T>> {
                 widget.groupHeaderBuilder != null,
             '''Must provide builder for group item in case support flat group''');
 
-        final List<Group> groups = items;
+        final groups = items as List<Group>;
 
         if (widget.itemSeparatorBuilder != null) {
           listView = ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             padding: widget.padding,
             itemCount: groups.totalItemWithHeader(),
-            separatorBuilder: (_, index) => widget.itemSeparatorBuilder(index),
+            separatorBuilder: (_, index) => widget.itemSeparatorBuilder!(index),
             itemBuilder: (_, index) {
               if (groups.isGroupHeader(index: index)) {
                 return LoadListGroupHeader(
                   groups: groups,
                   index: index,
-                  builder: widget.groupHeaderBuilder,
+                  builder: widget.groupHeaderBuilder!,
                 );
               }
               final item = groups.groupItem(index: index);
+              if (item == null) {
+                return const SizedBox();
+              }
               return widget.groupItemPlaceholderBuilder != null
                   ? ListItemLayout(
-                      placeholder:
-                          widget.groupItemPlaceholderBuilder(item, index),
+                      placeholder: widget.groupItemPlaceholderBuilder!(item),
                       slideUpAnimation: widget.slideUpAnimation &&
                           _isScrollDown &&
                           index >= widget.startingSlideUpIndex,
-                      child: widget.groupItemBuilder(item, index),
+                      child: widget.groupItemBuilder!(item),
                     )
-                  : widget.groupItemBuilder(item, index);
+                  : widget.groupItemBuilder!(item);
             },
           );
         } else {
           listView = ListView.builder(
-            physics: const AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             padding: widget.padding,
             itemCount: groups.totalItemWithHeader(),
@@ -329,63 +335,62 @@ class _LoadListState<T extends Entity> extends State<LoadList<T>> {
                 return LoadListGroupHeader(
                   groups: groups,
                   index: index,
-                  builder: widget.groupHeaderBuilder,
+                  builder: widget.groupHeaderBuilder!,
                 );
               }
               final item = groups.groupItem(index: index);
               return widget.groupItemPlaceholderBuilder != null
                   ? ListItemLayout(
-                      placeholder:
-                          widget.groupItemPlaceholderBuilder(item, index),
+                      placeholder: widget.groupItemPlaceholderBuilder!(item!),
                       slideUpAnimation: widget.slideUpAnimation &&
                           _isScrollDown &&
                           index >= widget.startingSlideUpIndex,
-                      child: widget.groupItemBuilder(item, index),
+                      child: widget.groupItemBuilder!(item),
                     )
-                  : widget.groupItemBuilder(item, index);
+                  : widget.groupItemBuilder!(item!);
             },
           );
         }
       } else {
         if (widget.itemSeparatorBuilder != null) {
           listView = ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             padding: widget.padding,
             itemCount: items.length,
-            separatorBuilder: (_, index) => widget.itemSeparatorBuilder(index),
+            separatorBuilder: (_, index) => widget.itemSeparatorBuilder!(index),
             addAutomaticKeepAlives: widget.automaticKeepAlives,
             itemBuilder: (_, index) => widget.itemPlaceholderBuilder != null
                 ? ListItemLayout(
-                    placeholder: widget.itemPlaceholderBuilder(items[index]),
-                    child: widget.itemBuilder(items[index], index),
+                    placeholder:
+                        widget.itemPlaceholderBuilder!(items[index] as T),
+                    child: widget.itemBuilder!(items[index] as T, index),
                   )
                 : KeepAliveListItem(
                     automaticKeepAlive: widget.automaticKeepAlives,
-                    child: widget.itemBuilder(items[index], index),
+                    child: widget.itemBuilder!(items[index] as T, index),
                   ),
           );
         } else {
           listView = ListView.builder(
-            physics: const AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             padding: widget.padding,
             itemCount: items.length,
             addAutomaticKeepAlives: widget.automaticKeepAlives,
             itemBuilder: (_, index) => widget.itemPlaceholderBuilder != null
                 ? ListItemLayout(
-                    placeholder: widget.itemPlaceholderBuilder(items[index]),
-                    child: widget.itemBuilder(items[index], index),
+                    placeholder:
+                        widget.itemPlaceholderBuilder!(items[index] as T),
+                    child: widget.itemBuilder!(items[index] as T, index),
                   )
                 : KeepAliveListItem(
                     automaticKeepAlive: widget.automaticKeepAlives,
-                    child: widget.itemBuilder(items[index], index),
+                    child: widget.itemBuilder!(items[index] as T, index),
                   ),
           );
         }
       }
     }
-    return listView;
+    return widget.scrollbarEnabled ? Scrollbar(child: listView) : listView;
   }
 
   @override
@@ -397,11 +402,11 @@ class _LoadListState<T extends Entity> extends State<LoadList<T>> {
           current is LoadListRemoveItemSuccess,
       listener: (context, state) {
         if (state is LoadListLoadPageSuccess && widget.onDataIsReady != null) {
-          widget.onDataIsReady(getItems(state), _isRefresh);
+          widget.onDataIsReady!(state.items as List<T>, _isRefresh);
           _isRefresh = false;
         } else if (state is LoadListRemoveItemSuccess &&
             widget.onItemRemoved != null) {
-          widget.onItemRemoved(state.removedItem);
+          widget.onItemRemoved!(state.removedItem as T);
         }
       },
       buildWhen: (previous, current) {
@@ -438,12 +443,12 @@ class _LoadListState<T extends Entity> extends State<LoadList<T>> {
           return items.isEmpty
               ? widget.emptyWidget ??
                   EmptyList(
-                    emptyMessage: widget.emptyMessage,
+                    emptyMessage: widget.emptyMessage ?? 'No Items',
                     color: widget.loadingIndicatorColor,
-                    doReload: _reload,
+                    onReload: widget.needReloadWhenEmpty ? _reload : null,
                   )
               : widget.listRender != null
-                  ? widget.listRender(items)
+                  ? widget.listRender!(items)
                   : widget.needPullToRefresh
                       ? RefreshIndicator(
                           key: _refreshIndicatorKey,

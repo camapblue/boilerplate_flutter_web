@@ -1,8 +1,7 @@
-import 'package:boilerplate_flutter_web/blocs/mixin/mixin.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:common/common.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:bloc/bloc.dart';
 
 import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:boilerplate_flutter_web/blocs/blocs.dart';
@@ -10,11 +9,11 @@ import 'package:boilerplate_flutter_web/blocs/blocs.dart';
 import 'package:repository/repository.dart';
 
 abstract class BaseBloc<E extends Object, S extends Equatable>
-    extends Bloc<E, S> with MessageShowing {
+    extends Bloc<E, S> {
   final Key key;
-  final Key closeWithBlocKey;
+  final Key? closeWithBlocKey;
 
-  BaseBloc(this.key, {@required S initialState, this.closeWithBlocKey})
+  BaseBloc(this.key, {required S initialState, this.closeWithBlocKey})
       : super(initialState) {
     otherBlocsSubscription();
   }
@@ -33,6 +32,10 @@ abstract class BaseBloc<E extends Object, S extends Equatable>
 
     await super.close();
   }
+
+  void otherBlocsSubscription() {}
+
+  void otherBlocsUnsubscription() {}
 
   void showAppError(String messageKey, {List<dynamic> params = const []}) {
     EventBus().event<ShowMessageBloc>(
@@ -56,17 +59,13 @@ abstract class BaseBloc<E extends Object, S extends Equatable>
     }
   }
 
-  void otherBlocsSubscription() {}
-
-  void otherBlocsUnsubscription() {}
-
   List<Broadcast> subscribes() {
-    return null;
+    return <Broadcast>[];
   }
 
-  void addLater(Object event, {Duration after = const Duration(seconds: 1)}) {
-    Future.delayed(after, () {
-      add(event);
-    });
+  void addLater(E event, {Duration after = const Duration(seconds: 1)}) {
+    Future.delayed(after, () => add(event));
   }
 }
+
+

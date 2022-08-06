@@ -8,7 +8,11 @@ class Broadcast extends Equatable {
   final String event;
   final BroadcastObserver onNext;
 
-  Broadcast({this.blocKey, this.event, this.onNext});
+  const Broadcast({
+    required this.blocKey,
+    required this.event,
+    required this.onNext,
+  });
 
   @override
   List<Object> get props => [blocKey];

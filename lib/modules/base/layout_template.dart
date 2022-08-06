@@ -8,7 +8,7 @@ import 'package:boilerplate_flutter_web/modules/base/centered_view.dart';
 import 'package:boilerplate_flutter_web/modules/base/page_navigation_bar.dart';
 
 class LayoutTemplate extends StatelessWidget {
-  const LayoutTemplate({Key key}) : super(key: key);
+  const LayoutTemplate({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

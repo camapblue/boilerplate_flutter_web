@@ -1,30 +1,27 @@
-import 'package:boilerplate_flutter_web/widgets/widgets.dart';
 import 'package:boilerplate_flutter_web/constants/constants.dart';
-import 'package:boilerplate_flutter_web/theme/theme.dart';
+import 'package:boilerplate_flutter_web/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'load_list_theme.dart';
 
 class EmptyList extends StatelessWidget {
-  EmptyList({
-    Key key,
-    @required this.emptyMessage,
-    @required this.doReload,
-    this.color = whiteColor,
-  }) : super(key: key);
-
-  final Function doReload;
   final String emptyMessage;
   final Color color;
+  final GestureTapCallback? onReload;
+
+  const EmptyList({
+    Key? key,
+    required this.emptyMessage,
+    this.color = Colors.white,
+    this.onReload,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Expanded(
-            child: Container(),
-          ),
-          Container(
+          SizedBox(
             height: 64,
             child: Center(
               child: AppIcon(
@@ -38,17 +35,21 @@ class EmptyList extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(top: 32, bottom: 32),
             child: Text(
-              emptyMessage ?? 'No items',
+              emptyMessage,
               textAlign: TextAlign.center,
               style: Theme.of(context)
                   .loadListEmptyMessageTextStyle
                   .copyWith(color: color),
             ),
           ),
-          Button.reload(context: context, onPressed: doReload),
-          Expanded(
-            child: Container(),
-          ),
+          if (onReload != null)
+            SizedBox(
+              width: 100,
+              child: Button.reload(
+                context: context,
+                onPressed: onReload,
+              ),
+            )
         ],
       ),
     );

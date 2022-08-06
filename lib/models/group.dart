@@ -1,23 +1,22 @@
-import 'package:flutter/foundation.dart';
-import 'package:repository/model/model.dart';
+import 'package:equatable/equatable.dart';
 
 typedef MapFunction<T, S> = S Function(T source);
 typedef CompareFunction<T> = int Function(T a, T b);
 
-class Group<T extends Object> extends Entity {
+class Group<T extends Object> extends Equatable {
   final String groupBy;
   final List<T> list;
-  final Map<String, dynamic> extra;
+  final Map<String, dynamic>? extra;
   final bool isHidden;
 
   Group({
-    this.groupBy,
-    List<T> initital,
+    required this.groupBy,
+    List<T>? initital,
     this.extra,
     this.isHidden = false,
   }) : list = initital ?? <T>[];
 
-  factory Group.custom({String type, Map<String, dynamic> data}) {
+  factory Group.custom({required String type, Map<String, dynamic>? data}) {
     return Group(groupBy: type, extra: data);
   }
 
@@ -33,20 +32,20 @@ class Group<T extends Object> extends Entity {
 
   T itemAtIndex(int index) => list[index];
 
-  void sort({@required CompareFunction<T> compareFunction}) {
+  void sort({required CompareFunction<T> compareFunction}) {
     list.sort(compareFunction);
   }
 
-  void insertItem(T item, {int at}) {
+  void insertItem(T item, {required int at}) {
     list.insert(at, item);
   }
 
-  A extraObjectByKey<A extends Object>({@required String key}) {
+  A? extraObjectByKey<A extends Object>({required String key}) {
     if (extra == null) {
       return null;
     }
 
-    return extra[key];
+    return extra![key];
   }
 
   Group<S> map<S extends Object>(MapFunction<T, S> mapFunction) {
@@ -57,9 +56,7 @@ class Group<T extends Object> extends Entity {
     );
   }
 
-  Group<T> copyWith({
-    bool isHidden
-  }) {
+  Group<T> copyWith({bool? isHidden}) {
     return Group<T>(
       groupBy: groupBy,
       initital: list,
@@ -70,7 +67,4 @@ class Group<T extends Object> extends Entity {
 
   @override
   List<Object> get props => [groupBy];
-
-  @override
-  Map<String, dynamic> toJson() => null;
 }

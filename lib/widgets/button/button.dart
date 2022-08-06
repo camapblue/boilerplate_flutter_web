@@ -7,21 +7,21 @@ export 'ink_well_button.dart';
 
 class Button extends StatelessWidget {
   final String title;
-  final BorderRadiusGeometry borderRadius;
-  final Color backgroundColor;
-  final BoxBorder border;
+  final BorderRadiusGeometry? borderRadius;
+  final Color? backgroundColor;
+  final BoxBorder? border;
   final Color titleColor;
-  final void Function() onPressed;
+  final VoidCallback? onPressed;
   final bool loading;
   final double height;
-  final double width;
-  final double titleFontSize;
-  final EdgeInsets padding;
+  final double? width;
+  final double? titleFontSize;
+  final EdgeInsets? padding;
   final Brightness indicatorBrightness;
 
   const Button({
-    Key key,
-    @required this.title,
+    Key? key,
+    required this.title,
     this.borderRadius,
     this.backgroundColor,
     this.border,
@@ -70,12 +70,12 @@ class Button extends StatelessWidget {
   }
 
   factory Button.pink({
-    @required String title,
+    required String title,
     bool loading = false,
-    void Function() onPressed,
-    EdgeInsets padding,
-    double titleFontSize,
-    BorderRadius borderRadius,
+    VoidCallback? onPressed,
+    EdgeInsets? padding,
+    double? titleFontSize,
+    BorderRadius? borderRadius,
   }) {
     if (onPressed == null) {
       return Button._disabled(
@@ -97,7 +97,7 @@ class Button extends StatelessWidget {
   }
 
   factory Button._disabled({
-    @required String title,
+    required String title,
     final bool loading = false,
     final double titleFontSize = 16,
   }) {
@@ -111,8 +111,8 @@ class Button extends StatelessWidget {
   }
 
   factory Button.outlinedBlue({
-    @required String title,
-    void Function() onPressed,
+    required String title,
+    VoidCallback? onPressed,
     final bool loading = false,
   }) {
     if (onPressed == null) {
@@ -134,9 +134,9 @@ class Button extends StatelessWidget {
   }
 
   factory Button.outlinedPink({
-    Key key,
-    @required String title,
-    void Function() onPressed,
+    Key? key,
+    required String title,
+    VoidCallback? onPressed,
     bool loading = false,
     double titleFontSize = 16,
   }) {
@@ -161,9 +161,9 @@ class Button extends StatelessWidget {
   }
 
   factory Button.reload({
-    @required BuildContext context,
+    required BuildContext context,
     bool loading = false,
-    void Function() onPressed,
+    VoidCallback? onPressed,
   }) {
     return Button(
       backgroundColor: AppColors.pink,

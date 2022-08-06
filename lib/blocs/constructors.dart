@@ -5,6 +5,5 @@ import 'package:flutter/foundation.dart';
 import 'blocs.dart';
 
 final Map<Type, Object Function(Key key)> blocConstructors = {
-  ConnectivityBloc: (Key key) => ConnectivityBloc(key),
-  ThemeBloc: (Key key) => ThemeBloc(key),
+  ThemeBloc: ThemeBloc.new,
 };

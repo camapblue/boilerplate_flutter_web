@@ -1,14 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:boilerplate_flutter_web/widgets/widgets.dart';
-
+import 'package:flutter/material.dart';
 import 'load_list_theme.dart';
 
 class ErrorList extends StatelessWidget {
-  ErrorList({Key key, @required this.errorMessage, @required this.doReload})
-      : super(key: key);
+  const ErrorList({
+    Key? key,
+    required this.errorMessage,
+    required this.doReload,
+  }) : super(key: key);
 
-  final Function doReload;
+  final GestureTapCallback? doReload;
   final String errorMessage;
 
   @override
@@ -19,17 +21,18 @@ class ErrorList extends StatelessWidget {
       child: Column(
         children: <Widget>[
           const Spacer(),
-          Container(
+          const SizedBox(
             height: 32,
             child: Center(
               child: AppIcon(
                 icon: AppIcons.error,
-                width: 92,
-                height: 92,
+                width: 32,
+                height: 32,
               ),
             ),
           ),
           Expanded(
+            flex: 1,
             child: Center(
               child: Text(
                 errorMessage,
@@ -40,7 +43,10 @@ class ErrorList extends StatelessWidget {
               ),
             ),
           ),
-          Button.reload(context: context, onPressed: doReload),
+          Button.reload(
+            context: context,
+            onPressed: doReload,
+          ),
           const Spacer(),
         ],
       ),

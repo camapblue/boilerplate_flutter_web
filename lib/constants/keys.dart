@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names, lines_longer_than_80_chars
+
 import 'package:flutter/foundation.dart';
 
 class Keys {
@@ -18,7 +20,6 @@ class _Blocs {
   final Key forceToDisposeBloc = const Key('force_to_dispose_bloc');
   final Key showMessageBloc = const Key('show_message_bloc');
 
-  final Key connectivityBloc = const Key('connectivity_bloc');
   final Key themeBloc = const Key('theme_bloc');
 
   // List

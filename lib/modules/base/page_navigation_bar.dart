@@ -8,7 +8,7 @@ class _NavBarItem extends StatelessWidget {
   final String title;
   const _NavBarItem(
     this.title, {
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -87,7 +87,7 @@ class _NavigationBarTabletDesktop extends StatelessWidget {
 }
 
 class PageNavigationBar extends StatelessWidget {
-  const PageNavigationBar();
+  const PageNavigationBar({Key? key}): super(key: key);
 
   @override
   Widget build(BuildContext context) {

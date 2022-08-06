@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:boilerplate_flutter_web/services/services.dart';
-import 'package:flutter/material.dart';
 import 'package:repository/repository.dart';
 import 'package:repository/repository/repository.dart';
 
@@ -9,7 +8,7 @@ class UserServiceImpl implements UserService {
   final UserRepository userRepository;
 
   UserServiceImpl({
-    @required this.userRepository,
+    required this.userRepository,
   });
 
   @override

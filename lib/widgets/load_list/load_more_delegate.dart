@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:loadmore/loadmore.dart';
-import 'package:boilerplate_flutter_web/theme/theme_constants.dart';
 
 class ListViewLoadMoreDelegate extends LoadMoreDelegate {
   @override
   Widget buildChild(LoadMoreStatus status,
       {Function builder = DefaultLoadMoreTextBuilder.chinese}) {
     return const CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(whiteColor));
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.black));
   }
 
   @override

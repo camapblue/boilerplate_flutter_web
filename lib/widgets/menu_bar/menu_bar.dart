@@ -5,22 +5,22 @@ typedef OnItemChanged = Function(int page);
 typedef MenuItemBuilder = Widget Function(int index, bool selected);
 
 class MenuBarController {
-  Function navigateToItem;
+  void Function(int)? navigateToItem;
 
   void jumpTo(int index) {
     if (navigateToItem != null) {
-      navigateToItem(index);
+      navigateToItem!(index);
     }
   }
 }
 
 class MenuBar extends StatefulWidget {
   const MenuBar({
-    Key key,
+    Key? key,
     this.menuController,
     this.onItemChanged,
-    @required this.itemBuilder,
-    @required this.totalItem,
+    required this.itemBuilder,
+    required this.totalItem,
     this.height = 50,
     this.backgroundColor,
     this.scrollable = true,
@@ -30,12 +30,12 @@ class MenuBar extends StatefulWidget {
     this.noSelectedItem = false,
   }) : super(key: key);
 
-  final MenuBarController menuController;
-  final OnItemChanged onItemChanged;
+  final MenuBarController? menuController;
+  final OnItemChanged? onItemChanged;
   final MenuItemBuilder itemBuilder;
   final int totalItem;
   final double height;
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final bool scrollable;
   final bool itemEqual;
   final int numberRow;
@@ -43,11 +43,11 @@ class MenuBar extends StatefulWidget {
   final bool noSelectedItem;
 
   @override
-  _MenuBarState createState() => _MenuBarState();
+  State<MenuBar> createState() => _MenuBarState();
 }
 
 class _MenuBarState extends State<MenuBar> {
-  int _selectedIndex;
+  int _selectedIndex = 0;
   final itemScrollController = ItemScrollController();
   final itemPositionsListener = ItemPositionsListener.create();
 
@@ -56,11 +56,11 @@ class _MenuBarState extends State<MenuBar> {
     _selectedIndex = widget.initialIndex;
 
     if (widget.menuController != null) {
-      widget.menuController.navigateToItem = (int index) {
+      widget.menuController!.navigateToItem = (int index) {
         _selectedIndex = index;
 
         if (widget.onItemChanged != null) {
-          widget.onItemChanged(_selectedIndex);
+          widget.onItemChanged!(_selectedIndex);
         }
 
         if (widget.scrollable) {
@@ -102,7 +102,7 @@ class _MenuBarState extends State<MenuBar> {
         });
 
         if (widget.onItemChanged != null) {
-          widget.onItemChanged(index);
+          widget.onItemChanged!(index);
         }
       },
       child: item,
@@ -116,7 +116,7 @@ class _MenuBarState extends State<MenuBar> {
         : menuItem;
   }
 
-  List<Widget> _buildItems({int column = 0, int itemInRow}) {
+  List<Widget> _buildItems({int column = 0, int? itemInRow}) {
     final total = itemInRow ?? widget.totalItem;
     return List.generate(total.toInt(), (i) {
       final index = column * total + i;
@@ -139,7 +139,7 @@ class _MenuBarState extends State<MenuBar> {
                     final itemInRow = widget.totalItem / widget.numberRow;
                     return Expanded(
                       flex: 1,
-                      child: Container(
+                      child: SizedBox(
                         child: Row(
                           children: _buildItems(
                             column: i,

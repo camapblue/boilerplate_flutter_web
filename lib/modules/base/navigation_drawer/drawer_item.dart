@@ -17,7 +17,7 @@ class _NavBarItem extends StatelessWidget {
 class DrawerItem extends StatelessWidget {
   final String title;
   final IconData icon;
-  const DrawerItem(this.title, this.icon);
+  const DrawerItem(this.title, this.icon, {Key? key}): super(key: key);
 
   @override
   Widget build(BuildContext context) {

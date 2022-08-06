@@ -1,5 +1,4 @@
-import 'package:boilerplate_flutter_web/models/models.dart';
-import 'package:repository/model/model.dart';
+import 'group.dart';
 
 extension GroupList on List<Group> {
   static bool isListGroup(String type) => type.contains('List<Group<');
@@ -8,6 +7,7 @@ extension GroupList on List<Group> {
     var total = 0;
     for (final group in this) {
       if (isListGroup(group.list.runtimeType.toString())) {
+        //ignore: avoid_as
         total += GroupList(group.list as List<Group>).totalItem();
       } else {
         total += group.length;
@@ -25,7 +25,7 @@ extension GroupList on List<Group> {
     return total;
   }
 
-  bool isGroupHeader({int index}) {
+  bool isGroupHeader({required int index}) {
     if (index == 0) {
       return true;
     }
@@ -42,7 +42,7 @@ extension GroupList on List<Group> {
     return false;
   }
 
-  String groupHeaderTitle({int index}) {
+  String groupHeaderTitle({required int index}) {
     if (index == 0) {
       return first.groupBy;
     }
@@ -59,7 +59,7 @@ extension GroupList on List<Group> {
     return 'N/A';
   }
 
-  bool isGroupHeaderHidden({int index}) {
+  bool isGroupHeaderHidden({required int index}) {
     if (index == 0) {
       return first.isHidden;
     }
@@ -76,16 +76,16 @@ extension GroupList on List<Group> {
     return false;
   }
 
-  Map<String, dynamic> groupHeaderExtraData({int index}) {
+  Map<String, dynamic> groupHeaderExtraData({required int index}) {
     if (index == 0) {
-      return first.extra;
+      return first.extra ?? {};
     }
 
     var headerIndex = 0;
     for (var i = 0; i < length; i++) {
       headerIndex += this[i].length + 1;
       if (headerIndex == index) {
-        return this[i + 1].extra;
+        return this[i + 1].extra ?? {};
       } else if (headerIndex > index) {
         break;
       }
@@ -93,7 +93,7 @@ extension GroupList on List<Group> {
     return const {};
   }
 
-  I groupItem<I extends Entity>({int index}) {
+  I? groupItem<I extends Object>({required int index}) {
     if (index == 0) {
       return null;
     }
@@ -105,7 +105,7 @@ extension GroupList on List<Group> {
       if (headerIndex == index) {
         return null;
       } else if (headerIndex > index) {
-        return this[i].itemAtIndex(index - previousIndex - 1);
+        return this[i].itemAtIndex(index - previousIndex - 1) as I;
       }
     }
     return null;

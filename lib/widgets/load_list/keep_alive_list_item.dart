@@ -4,10 +4,11 @@ class KeepAliveListItem extends StatefulWidget {
   final Widget child;
   final bool automaticKeepAlive;
 
-  KeepAliveListItem({
-    @required this.child,
+  const KeepAliveListItem({
+    Key? key,
+    required this.child,
     this.automaticKeepAlive = false,
-  });
+  }) : super(key: key);
 
   @override
   State<KeepAliveListItem> createState() {

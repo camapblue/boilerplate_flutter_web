@@ -14,7 +14,7 @@ class SLocalizationsDelegate extends LocalizationsDelegate<S> {
   @override
   Future<S> load(Locale locale) async {
     final localeName =
-        (locale.countryCode == null || locale.countryCode.isEmpty)
+        (locale.countryCode == null || locale.countryCode!.isEmpty)
             ? locale.languageCode
             : locale.toString();
 
@@ -32,10 +32,10 @@ class S {
 
   Future<bool> load(Locale locale) async {
     final data = await rootBundle.loadString('lib/i18n/$localeName.json');
-    final _result = Map<String, dynamic>.from(json.decode(data));
+    final result = Map<String, dynamic>.from(json.decode(data));
 
     _sentences = {};
-    _result.forEach((String key, dynamic value) {
+    result.forEach((String key, dynamic value) {
       _sentences[key] = value.toString();
     });
 
@@ -44,11 +44,11 @@ class S {
 
   // ignore: prefer_constructors_over_static_methods
   static S of(BuildContext context) {
-    return Localizations.of<S>(context, S) ?? S(null);
+    return Localizations.of<S>(context, S) ?? S('en');
   }
 
-  final String localeName;
-  Map<String, String> _sentences;
+  final String? localeName;
+  Map<String, String> _sentences = {};
 
   String translateText(TranslatedText text) {
     return translate(text.text, suffix: text.suffix, params: text.params);
@@ -66,7 +66,7 @@ class S {
     if (!checkNumberParams) {
       return _sentences[key] == null
           ? '${sprintf(key, params)}$suffix'
-          : '${sprintf(_sentences[key], params)}$suffix';
+          : '${sprintf(_sentences[key]!, params)}$suffix';
     }
 
     final comps = key.split(' ');
@@ -83,6 +83,6 @@ class S {
 
     return _sentences[keyString] == null
       ? '${sprintf(keyString, numberParams)}$suffix'
-      : '${sprintf(_sentences[keyString], numberParams)}$suffix';
+      : '${sprintf(_sentences[keyString]!, numberParams)}$suffix';
   }
 }
