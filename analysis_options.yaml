@@ -10,8 +10,7 @@ analyzer:
     avoid_print: error
   exclude:
     # exclude files
-    - lib/common/i18n    
-    - storybook/**
+    - lib/common/i18n
     - environments/**
     - test_data/**
 

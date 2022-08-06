@@ -17,24 +17,6 @@ export 'stateful_story.dart';
 /// ## Sample code
 ///
 /// ```dart
-/// runApp(new StoryboardApp([
-///     new MyFancyWidgetStory(),
-///     new MyBasicWidgetStory(),
-/// ]));
-/// ```
-class StoryboardApp extends MaterialApp {
-  /// Creates a new Storyboard App.
-  ///
-  ///  * [stories] defines the list of stories that will be combined into
-  ///  a storyboard.
-  StoryboardApp(List<Story> stories)
-      : assert(stories != null, 'stories must not be null'),
-        super(home: Storybook(stories));
-}
-
-/// ## Sample code
-///
-/// ```dart
 /// runApp(
 ///     MaterialApp(
 ///         home: Storybook([
@@ -44,18 +26,14 @@ class StoryboardApp extends MaterialApp {
 /// ```
 
 class Storybook extends StatelessWidget {
-  final _kStoryBookTitle = 'Storybook';
-
-  Storybook(this.stories)
-      : assert(stories != null, 'stories must not be null'),
-        super();
+  const Storybook(this.stories, {Key? key}) : super(key: key);
 
   final List<Story> stories;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(_kStoryBookTitle)),
+      appBar: AppBar(title: const Text('Storybook')),
       body: ListView.builder(
         itemBuilder: (BuildContext context, int index) => stories[index],
         itemCount: stories.length,
@@ -80,20 +58,18 @@ class Storybook extends StatelessWidget {
 typedef StoryBuilder = Widget Function(BuildContext context);
 
 class WidgetMap {
-  final String title;
+  final String? title;
   final StoryBuilder builder;
-  const WidgetMap({
-    this.title,
-    @required this.builder
-  });
+  const WidgetMap({this.title, required this.builder});
 }
 
 class StoryScreen extends StatelessWidget {
   final StoryBuilder builder;
   final String title;
-  final AppBar appBar;
+  final AppBar? appBar;
 
-  StoryScreen(this.title, this.appBar, this.builder);
+  const StoryScreen(this.title, this.appBar, this.builder, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -108,13 +84,13 @@ class StoryScreen extends StatelessWidget {
 }
 
 abstract class Story extends StatelessWidget {
-  const Story({Key key}) : super(key: key);
+  const Story({Key? key}) : super(key: key);
 
   List<WidgetMap> storyContent();
 
   String get title => runtimeType.toString();
 
-  AppBar get appBar => null;
+  AppBar? get appBar => null;
 
   Widget _widgetTileLauncher(
           StoryBuilder builder, String title, BuildContext context) =>
@@ -124,7 +100,7 @@ abstract class Story extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute<Null>(
+            MaterialPageRoute<void>(
               builder: (_) {
                 return StoryScreen(title, appBar, builder);
               },
@@ -135,16 +111,16 @@ abstract class Story extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _storyContent = storyContent();
-    if (_storyContent.length == 1) {
+    final content = storyContent();
+    if (content.length == 1) {
       return _widgetTileLauncher(
-          _storyContent[0].builder, _storyContent[0].title ?? title, context);
+          content[0].builder, content[0].title ?? title, context);
     } else {
       return ExpansionTile(
         leading: const Icon(Icons.fullscreen),
         key: PageStorageKey<Story>(this),
         title: Text(title),
-        children: _storyContent
+        children: content
             .map((WidgetMap w) =>
                 _widgetTileLauncher(w.builder, w.title ?? title, context))
             .toList(),

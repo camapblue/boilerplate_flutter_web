@@ -6,7 +6,9 @@ typedef RenderFunction = void Function(Function render);
 class StatefulStory extends StatefulWidget {
   final StoryBuilder builder;
   final RenderFunction renderFunction;
-  StatefulStory({@required this.builder, @required this.renderFunction});
+  const StatefulStory(
+      {Key? key, required this.builder, required this.renderFunction})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
