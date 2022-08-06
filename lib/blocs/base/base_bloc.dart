@@ -67,5 +67,3 @@ abstract class BaseBloc<E extends Object, S extends Equatable>
     Future.delayed(after, () => add(event));
   }
 }
-
-

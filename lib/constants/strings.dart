@@ -21,4 +21,3 @@ class _Navigation {
 class _Home {
   final String noUsers = 'home.no_users';
 }
-

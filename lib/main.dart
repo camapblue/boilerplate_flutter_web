@@ -17,7 +17,7 @@ Future<void> main() async {
     overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
   );
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  
+
   BlocOverrides.runZoned(
     () => runZonedGuarded(() {
       runApp(const MyApp());
@@ -41,9 +41,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider<ThemeBloc>(create: (_) => ThemeBloc.instance())
-      ],
+      providers: [BlocProvider<ThemeBloc>(create: (_) => ThemeBloc.instance())],
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (_, state) {
           return MaterialApp(

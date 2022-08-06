@@ -7,9 +7,7 @@ class Configs {
     if (_singleton._configs == null) {
       try {
         _singleton._configs = {};
-        const String.fromEnvironment('env')
-          .split('|')
-          .forEach((comp) {
+        const String.fromEnvironment('env').split('|').forEach((comp) {
           if (comp.isNotEmpty) {
             final vars = comp.split('=');
             _singleton._configs[vars[0]] = vars[1];

@@ -82,7 +82,7 @@ class S {
     }
 
     return _sentences[keyString] == null
-      ? '${sprintf(keyString, numberParams)}$suffix'
-      : '${sprintf(_sentences[keyString]!, numberParams)}$suffix';
+        ? '${sprintf(keyString, numberParams)}$suffix'
+        : '${sprintf(_sentences[keyString]!, numberParams)}$suffix';
   }
 }

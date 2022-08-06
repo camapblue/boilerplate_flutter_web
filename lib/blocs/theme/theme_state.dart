@@ -1,10 +1,9 @@
-
 import 'package:equatable/equatable.dart';
 
 abstract class ThemeState extends Equatable {
   final dynamic theme;
 
-  const ThemeState([ this.theme ]);
+  const ThemeState([this.theme]);
 
   @override
   List<Object> get props => [theme];

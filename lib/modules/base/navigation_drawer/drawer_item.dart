@@ -5,7 +5,6 @@ class _NavBarItem extends StatelessWidget {
   const _NavBarItem(this.title);
 
   @override
-
   Widget build(BuildContext context) {
     return Text(
       title,
@@ -17,7 +16,7 @@ class _NavBarItem extends StatelessWidget {
 class DrawerItem extends StatelessWidget {
   final String title;
   final IconData icon;
-  const DrawerItem(this.title, this.icon, {Key? key}): super(key: key);
+  const DrawerItem(this.title, this.icon, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

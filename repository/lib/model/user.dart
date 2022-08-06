@@ -26,14 +26,9 @@ class User extends Entity {
 
   @override
   List<Object> get props => [id];
-  
+
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'email': email,
-      'role': role.value
-    };
+    return {'id': id, 'name': name, 'email': email, 'role': role.value};
   }
 }

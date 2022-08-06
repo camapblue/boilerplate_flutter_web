@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:boilerplate_flutter_web/services/services.dart';
 
-
 class SettingServiceImpl implements SettingService {
   final List<String> supportedLanguages;
   SettingServiceImpl({required this.supportedLanguages});

@@ -11,7 +11,8 @@ abstract class BaseClient {
 
   BaseClient(String host, {Client? client, String? authorization})
       : _client = client ?? Client(),
-        _host = host, _authorization = authorization;
+        _host = host,
+        _authorization = authorization;
 
   Uri _getParsedUrl(String path) {
     return Uri.parse('$_host$path');

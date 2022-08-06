@@ -87,7 +87,7 @@ class _NavigationBarTabletDesktop extends StatelessWidget {
 }
 
 class PageNavigationBar extends StatelessWidget {
-  const PageNavigationBar({Key? key}): super(key: key);
+  const PageNavigationBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

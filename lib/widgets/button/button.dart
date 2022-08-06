@@ -33,7 +33,7 @@ class Button extends StatelessWidget {
     this.titleFontSize = 16,
     this.padding,
     this.indicatorBrightness = Brightness.light,
-  }): super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

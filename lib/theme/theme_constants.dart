@@ -41,32 +41,31 @@ const String _primaryFont = 'NeoSansIntel';
 
 /* Text Theme */
 const TextTheme appPrimaryTextTheme = TextTheme(
-    bodyText1: TextStyle(
-        fontFamily: _primaryFont,
-        color: whiteColor,
-        fontSize: 15,
-        fontWeight: FontWeight.w400),
-    bodyText2: TextStyle(
-        fontFamily: _primaryFont,
-        color: whiteColor,
-        fontSize: 15,
-        fontWeight: FontWeight.w400,
-        fontStyle: FontStyle.italic),
-    button: TextStyle(
-        fontFamily: _primaryFont,
-        color: whiteColor,
-        fontSize: 16,
-        fontWeight: FontWeight.w400),
-    headline1: TextStyle(
-        fontFamily: _primaryFont,
-        color: whiteColor,
-        fontSize: 16,
-        fontWeight: FontWeight.w700),
-    headline2: TextStyle(
-        fontFamily: _primaryFont,
-        color: whiteColor,
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        fontStyle: FontStyle.italic),
-    );
-
+  bodyText1: TextStyle(
+      fontFamily: _primaryFont,
+      color: whiteColor,
+      fontSize: 15,
+      fontWeight: FontWeight.w400),
+  bodyText2: TextStyle(
+      fontFamily: _primaryFont,
+      color: whiteColor,
+      fontSize: 15,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.italic),
+  button: TextStyle(
+      fontFamily: _primaryFont,
+      color: whiteColor,
+      fontSize: 16,
+      fontWeight: FontWeight.w400),
+  headline1: TextStyle(
+      fontFamily: _primaryFont,
+      color: whiteColor,
+      fontSize: 16,
+      fontWeight: FontWeight.w700),
+  headline2: TextStyle(
+      fontFamily: _primaryFont,
+      color: whiteColor,
+      fontSize: 16,
+      fontWeight: FontWeight.w700,
+      fontStyle: FontStyle.italic),
+);

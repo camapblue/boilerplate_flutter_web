@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class FadingWithPlaceholder extends StatefulWidget {
@@ -7,13 +6,13 @@ class FadingWithPlaceholder extends StatefulWidget {
   final Duration? delayToShow;
   final Duration duration;
 
-  FadingWithPlaceholder({
-    Key? key,
-    this.placeholder,
-    this.delayToShow,
-    this.duration = const Duration(milliseconds: 350),
-    required this.child
-  }): super(key: key);
+  FadingWithPlaceholder(
+      {Key? key,
+      this.placeholder,
+      this.delayToShow,
+      this.duration = const Duration(milliseconds: 350),
+      required this.child})
+      : super(key: key);
 
   @override
   State<FadingWithPlaceholder> createState() {
@@ -44,7 +43,7 @@ class _FadingWithPlaceholderState extends State<FadingWithPlaceholder> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.placeholder == null) { 
+    if (widget.placeholder == null) {
       return widget.child;
     }
 

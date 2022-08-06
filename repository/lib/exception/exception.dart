@@ -34,8 +34,7 @@ class InvalidInputException extends ApiException {
 }
 
 class InvalidResponseException extends ApiException {
-  InvalidResponseException([message])
-      : super(message, 'Invalid Response');
+  InvalidResponseException([message]) : super(message, 'Invalid Response');
 }
 
 class AppException implements Exception {

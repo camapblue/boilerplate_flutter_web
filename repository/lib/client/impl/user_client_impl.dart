@@ -11,7 +11,8 @@ class UserClientImpl extends BaseClient implements UserClient {
 
   @override
   Future<User> logIn() async {
-    final json = await post('/users/logIn', { 'username': 'tester', 'password': 'abc123' });
+    final json = await post(
+        '/users/logIn', {'username': 'tester', 'password': 'abc123'});
 
     return User.fromJson(json['user']);
   }
