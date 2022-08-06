@@ -7,7 +7,7 @@ import 'package:repository/repository/user_repository.dart';
 class UserRepositoryImpl implements UserRepository {
   final UserClient userClient;
 
-  UserRepositoryImpl({this.userClient});
+  UserRepositoryImpl({required this.userClient});
 
   @override
   Future<User> logIn() {

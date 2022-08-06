@@ -1,41 +1,41 @@
 class ApiException implements Exception {
-  final String _message;
-  final String _prefix;
+  final String? _message;
+  final String? _prefix;
 
-  ApiException([this._message, this._prefix]);
+  ApiException([this._message = 'Api Exception', this._prefix = 'Api']);
 
   @override
   String toString() {
-    return '$_prefix$_message';
+    return '$_prefix: $_message';
   }
 
-  String get errorMessage => '$_prefix$_message';
+  String get errorMessage => '$_prefix: $_message';
 }
 
 class FetchDataException extends ApiException {
-  FetchDataException([String message])
-      : super(message, 'Error During Communication: ');
+  FetchDataException([message = 'Fetch Data Exception'])
+      : super(message, 'Fetch Data');
 }
 
 class BadRequestException extends ApiException {
-  BadRequestException([message]) : super(message, 'Invalid Request: ');
+  BadRequestException([message]) : super(message, 'Invalid');
 }
 
 class UnauthorisedException extends ApiException {
-  UnauthorisedException([message]) : super(message, 'Unauthorised: ');
+  UnauthorisedException([message]) : super(message, 'Unauthorised');
 }
 
 class ServerErrorException extends ApiException {
-  ServerErrorException([message]) : super(message, 'Server Error: ');
+  ServerErrorException([message]) : super(message, 'Server Error');
 }
 
 class InvalidInputException extends ApiException {
-  InvalidInputException([String message]) : super(message, 'Invalid Input: ');
+  InvalidInputException([message]) : super(message, 'Invalid Input');
 }
 
 class InvalidResponseException extends ApiException {
-  InvalidResponseException([String message])
-      : super(message, 'Invalid Response: ');
+  InvalidResponseException([message])
+      : super(message, 'Invalid Response');
 }
 
 class AppException implements Exception {

@@ -2,17 +2,18 @@
 import 'package:flutter/material.dart';
 
 class FadingWithPlaceholder extends StatefulWidget {
-  final Widget placeholder;
+  final Widget? placeholder;
   final Widget child;
-  final Duration delayToShow;
+  final Duration? delayToShow;
   final Duration duration;
 
   FadingWithPlaceholder({
+    Key? key,
     this.placeholder,
     this.delayToShow,
     this.duration = const Duration(milliseconds: 350),
-    @required this.child
-  });
+    required this.child
+  }): super(key: key);
 
   @override
   State<FadingWithPlaceholder> createState() {
@@ -30,7 +31,7 @@ class _FadingWithPlaceholderState extends State<FadingWithPlaceholder> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.placeholder != null) {
         if (widget.delayToShow != null) {
-          await Future.delayed(widget.delayToShow);
+          await Future.delayed(widget.delayToShow!);
         }
         if (mounted) {
           setState(() {

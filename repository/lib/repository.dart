@@ -17,7 +17,7 @@ class Repository {
 
   Repository._internal();
 
-  String accessToken;
+  String? accessToken;
 
   // Repository
   UserRepository get userRepository => UserRepositoryImpl(

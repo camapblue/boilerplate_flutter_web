@@ -1,11 +1,9 @@
-import 'package:flutter/foundation.dart';
-
 extension StringExtension on String {
   String reverse() {
     return split('').reversed.join();
   }
 
-  String insert(String string, {@required int at}) {
+  String insert(String string, {required int at}) {
     final comps = List<String>.from(split(''))..insert(at, string);
     return comps.join();
   }

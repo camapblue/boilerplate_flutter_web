@@ -8,24 +8,24 @@ class User extends Entity {
   final AdminRole role;
 
   User({
-    this.id,
-    this.name,
-    this.email,
-    this.role,
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.role,
   });
 
   // ignore: prefer_constructors_over_static_methods
   static User fromJson(dynamic json) {
     return User(
       id: json['id'],
-      name: json['name'],
+      name: json['name'] ?? 'No Name',
       email: json['email'],
-      role: adminRoleFromKey(key: json['role'] ?? 'ADMIN'),
+      role: adminRoleFromKey(key: json['role']) ?? AdminRole.admin,
     );
   }
 
   @override
-  List<Object> get props => [id, name, email];
+  List<Object> get props => [id];
   
   @override
   Map<String, dynamic> toJson() {

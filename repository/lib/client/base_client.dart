@@ -5,15 +5,13 @@ import 'package:repository/repository.dart';
 import 'package:retry/retry.dart';
 
 abstract class BaseClient {
-  Client _client;
-  String _host;
-  String _authorization;
+  final Client _client;
+  final String _host;
+  final String? _authorization;
 
-  BaseClient(String host, {Client client, String authorization}) {
-    _client = client ?? Client();
-    _host = host;
-    _authorization = authorization;
-  }
+  BaseClient(String host, {Client? client, String? authorization})
+      : _client = client ?? Client(),
+        _host = host, _authorization = authorization;
 
   Uri _getParsedUrl(String path) {
     return Uri.parse('$_host$path');
@@ -45,7 +43,7 @@ abstract class BaseClient {
     return requestCopy;
   }
 
-  dynamic _call(String method, String path, {Map<String, Object> data}) async {
+  dynamic _call(String method, String path, {Map<String, Object>? data}) async {
     dynamic responseJson;
     try {
       var request = Request(method, _getParsedUrl(path));
@@ -67,7 +65,7 @@ abstract class BaseClient {
         },
         retryIf: (e) async {
           if (e is UnauthorisedException) {
-            request = _copyRequest(request);
+            request = _copyRequest(request) as Request;
             return true;
           }
           return false;

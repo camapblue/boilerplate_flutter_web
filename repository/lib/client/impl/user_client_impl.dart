@@ -1,13 +1,12 @@
 import 'package:common/common.dart';
-import 'package:flutter/foundation.dart';
 import 'package:repository/client/client.dart';
 import 'package:repository/repository.dart';
 import 'package:repository/test_data.dart';
 
 class UserClientImpl extends BaseClient implements UserClient {
   UserClientImpl({
-    @required String host,
-    String authorization,
+    required String host,
+    String? authorization,
   }) : super(host, authorization: authorization);
 
   @override

@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
-
 enum AdminRole { superAdmin, admin, employee }
 
-AdminRole adminRoleFromKey({@required String key}) {
+AdminRole? adminRoleFromKey({required String key}) {
   switch (key) {
     case 'SUPER_ADMIN':
       return AdminRole.superAdmin;
@@ -29,9 +27,6 @@ extension AdminRoleExtension on AdminRole {
 
       case AdminRole.employee:
         return 'EMPLOYEE';
-
-      default:
-        return null;
     }
   }
 }
