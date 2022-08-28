@@ -1,7 +1,11 @@
-import 'package:boilerplate_flutter_web/blocs/blocs.dart';
 import 'package:boilerplate_flutter_web/services/services.dart';
+import 'package:common/core/core.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+part 'language_event.dart';
+part 'language_state.dart';
 
 class LanguageBloc extends BaseBloc<LanguageEvent, LanguageState> {
   final SettingService settingService;

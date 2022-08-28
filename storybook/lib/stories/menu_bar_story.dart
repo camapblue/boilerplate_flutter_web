@@ -17,6 +17,8 @@ class MenuBarStory extends Story {
     'Jewelry'
   ];
 
+  MenuBarStory({Key? key}) : super(key: key);
+
   @override
   List<WidgetMap> storyContent() {
     return [

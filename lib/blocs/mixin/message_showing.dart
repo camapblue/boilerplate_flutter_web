@@ -1,9 +1,11 @@
 import 'package:boilerplate_flutter_web/blocs/blocs.dart';
-import 'package:boilerplate_flutter_web/constants/constants.dart';
+import 'package:common/core/core.dart';
 
 mixin MessageShowing {
-  void showFailureMessage(String messageKey,
-      {List<dynamic> params = const []}) {
+  void showFailureMessage(
+    String messageKey, {
+    List<dynamic> params = const [],
+  }) {
     EventBus().event<ShowMessageBloc>(
       Keys.Blocs.showMessageBloc,
       WarningMessageShowed(
@@ -13,8 +15,10 @@ mixin MessageShowing {
     );
   }
 
-  void showSuccessMessage(String messageKey,
-      {List<dynamic> params = const []}) {
+  void showSuccessMessage(
+    String messageKey, {
+    List<dynamic> params = const [],
+  }) {
     EventBus().event<ShowMessageBloc>(
       Keys.Blocs.showMessageBloc,
       WarningMessageShowed(

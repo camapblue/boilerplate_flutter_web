@@ -13,6 +13,10 @@ dependencies:
   logger: ^1.1.0
   sprintf: ^6.0.0
   intl: ^0.17.0
+  flutter_bloc: ^8.0.1
+  equatable: ^2.0.3
+  loadmore: ^2.0.1
+  qlevar_router: ^1.6.2
 
 dev_dependencies:
   flutter_test:

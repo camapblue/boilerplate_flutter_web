@@ -1,8 +1,11 @@
 import 'package:boilerplate_flutter_web/blocs/blocs.dart';
-import 'package:boilerplate_flutter_web/constants/constants.dart';
+import 'package:common/core/core.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+part 'show_message_state.dart';
+part 'show_message_event.dart';
 
 class ShowMessageBloc extends BaseBloc<ShowMessageEvent, ShowMessageState> {
   ShowMessageBloc(Key key) : super(key, initialState: ShowMessageInitial()) {
@@ -11,7 +14,11 @@ class ShowMessageBloc extends BaseBloc<ShowMessageEvent, ShowMessageState> {
   }
 
   factory ShowMessageBloc.instance() {
-    return EventBus().newBloc<ShowMessageBloc>(Keys.Blocs.showMessageBloc);
+    final key = Keys.Blocs.showMessageBloc;
+    return EventBus().newBlocWithConstructor<ShowMessageBloc>(
+      key,
+      () => ShowMessageBloc(key),
+    );
   }
 
   void _onWarningMessageShowed(

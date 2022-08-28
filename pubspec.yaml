@@ -46,6 +46,8 @@ dependencies:
   responsive_builder: ^0.4.2
   scrollable_positioned_list: ^0.3.2
   flutter_svg: ^1.1.1
+  qlevar_router: ^1.6.2
+  flutter_keyboard_visibility: ^5.3.0
 
 dev_dependencies:
   flutter_test:

@@ -18,4 +18,24 @@ class UserServiceImpl implements UserService {
 
     return user;
   }
+
+  @override
+  Future<User> getUserProfile() async {
+    return User(
+      id: 'id',
+      email: 'abc@abc.com',
+      name: 'Name',
+      role: AdminRole.admin,
+    );
+  }
+
+  @override
+  Future<void> logOut() async {
+
+  }
+
+  @override
+  bool get isLoggedIn {
+    return false;
+  }
 }

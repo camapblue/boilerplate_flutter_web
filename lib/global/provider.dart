@@ -1,8 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names, lines_longer_than_80_chars
 
-import 'package:boilerplate_flutter_web/blocs/blocs.dart';
 import 'package:boilerplate_flutter_web/configs.dart';
 import 'package:boilerplate_flutter_web/services/services.dart';
+import 'package:common/core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:repository/repository.dart';

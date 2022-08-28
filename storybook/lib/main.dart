@@ -12,7 +12,7 @@ Future<void> main() async {
           theme: loadTheme(),
           home: Storybook(
             [
-              ButtonStory(), // Supermama
+              const ButtonStory(), // Supermama
               MenuBarStory(),
             ],
           ),

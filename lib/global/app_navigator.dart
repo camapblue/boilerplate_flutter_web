@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:qlevar_router/qlevar_router.dart';
 
 class AppNavigator {
   static final AppNavigator _singleton = AppNavigator._internal();
@@ -9,13 +9,14 @@ class AppNavigator {
 
   AppNavigator._internal();
 
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-  Future<dynamic> navigateTo(String routeName) {
-    return navigatorKey.currentState!.pushNamed(routeName);
+  Future<void> go(String path) {
+    final currentPath = QR.currentPath;
+    return QR.navigator.replace(currentPath, path);
   }
 
-  void goBack() {
-    return navigatorKey.currentState!.pop();
+  Future<void> goWithName(String name, {Map<String, dynamic>? params}) {
+    return QR.navigator.replaceLastName(name, params: params);
   }
+
+  String get location => QR.currentPath;
 }

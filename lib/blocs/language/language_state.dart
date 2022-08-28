@@ -1,6 +1,4 @@
-import 'dart:ui';
-
-import 'package:equatable/equatable.dart';
+part of 'language_bloc.dart';
 
 abstract class LanguageState extends Equatable {
   final Locale locale;

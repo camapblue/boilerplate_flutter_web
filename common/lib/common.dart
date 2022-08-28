@@ -10,6 +10,7 @@ export 'extension/date_time_extension.dart';
 export 'extension/object_extension.dart';
 export 'extension/iterable_extension.dart';
 export 'extension/num_extension.dart';
+export 'extension/context_extension.dart';
 
 export 'logging/log.dart';
 
