@@ -36,6 +36,6 @@ class UserServiceImpl implements UserService {
 
   @override
   bool get isLoggedIn {
-    return false;
+    return true;
   }
 }

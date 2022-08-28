@@ -7,3 +7,4 @@ export 'responsive/responsive_template_widget.dart';
 export 'text/x_text.dart';
 export 'text_form_field/x_text_form_field.dart';
 export 'text_form_field/x_password_form_field.dart';
+export 'image_network/x_image_network.dart';

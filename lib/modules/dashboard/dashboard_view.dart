@@ -1,52 +1,114 @@
 import 'package:boilerplate_flutter_web/blocs/blocs.dart';
-import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:boilerplate_flutter_web/global/global.dart';
-import 'package:common/core/core.dart';
+import 'package:boilerplate_flutter_web/modules/user_list/user_list_view.dart';
+import 'package:boilerplate_flutter_web/widgets/widgets.dart';
+import 'package:common/common.dart';
+import 'package:common/core/blocs/blocs.dart';
 import 'package:flutter/material.dart';
-import 'package:repository/repository.dart';
 
-class DashboardView extends StatelessWidget {
+part 'user_info_widget.dart';
+part 'menu_item_widget.dart';
+
+class DashboardView extends StatefulWidget {
   const DashboardView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.white,
-      child: LoadList<User>(
-        blocKey: Keys.Blocs.userListBloc,
-        loadingIndicatorColor: Colors.black54,
-        needPullToRefresh: false,
-        itemSeparatorBuilder: (index) => Column(
-          children: const [
-            SizedBox(height: 6),
-            Divider(height: 0, thickness: 0.5),
-            SizedBox(height: 6),
-          ],
-        ),
-        itemBuilder: (user, index) {
-          return Row(
-            children: [
-              Text(user.name),
-              const SizedBox(
-                width: 32,
-              ),
-              Text(user.email),
-              const SizedBox(
-                width: 32,
-              ),
-              Text(user.role.name),
-            ],
-          );
-        },
-        autoStart: true,
-        emptyWidget: Center(
-          child: Text(
-            S.of(context).translate(Strings.Home.noUsers),
-            style: Theme.of(context).primaryTextTheme.bodyText1,
-          ),
-        ),
-        needLoadMore: false,
+  State<DashboardView> createState() => _DashboardViewState();
+}
+
+class _DashboardViewState extends XResponsiveTemplateWidget<DashboardView> {
+  late ValueNotifier<Widget> _selectMenuNotifier;
+  int _currentSelectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectMenuNotifier = ValueNotifier(
+      const UserListView(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _selectMenuNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget mobileLayout(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const XText.titleLarge('Dashboard'),
       ),
+      drawer: Drawer(
+        backgroundColor: context.primaryColor,
+        child: _menuItemWidget(shouldPop: true),
+      ),
+      body: AnimatedBuilder(
+        animation: _selectMenuNotifier,
+        builder: (_, __) {
+          AppNavigator().back();
+          return _selectMenuNotifier.value;
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget webLayout(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _selectMenuNotifier,
+      builder: (_, __) {
+        return Row(
+          children: [
+            Container(
+              height: double.infinity,
+              width: 250.0,
+              color: context.primaryColor,
+              child: _menuItemWidget(),
+            ),
+            Expanded(child: _selectMenuNotifier.value),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _menuItemWidget({bool shouldPop = false}) {
+    return Column(
+      children: [
+        const SizedBox(height: 24.0),
+        const UserInfoWidget(),
+        const SizedBox(height: 24.0),
+        MenuItemWidget(
+          title: 'Dashboard',
+          isFirst: true,
+          isParent: true,
+          isSelected: _currentSelectedIndex == 0,
+          onTap: () {
+            _currentSelectedIndex = 0;
+            shouldPop ? Navigator.pop(context) : null;
+            _selectMenuNotifier.value = const UserListView();
+          },
+        ),
+        const Spacer(),
+        MenuItemWidget(
+          title: 'Log Out',
+          icon: const Icon(
+            Icons.logout,
+            color: Colors.white,
+            size: 20,
+          ),
+          isParent: false,
+          isSelected: false,
+          onTap: () {
+            EventBus().event<SessionBloc>(
+              Keys.Blocs.sessionBloc,
+              const SessionLoggedOut(),
+            );
+          },
+        ),
+      ],
     );
   }
 }

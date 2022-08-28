@@ -14,6 +14,10 @@ class AppNavigator {
     return QR.navigator.replace(currentPath, path);
   }
 
+  Future<void> back() {
+    return QR.back();
+  }
+
   Future<void> goWithName(String name, {Map<String, dynamic>? params}) {
     return QR.navigator.replaceLastName(name, params: params);
   }

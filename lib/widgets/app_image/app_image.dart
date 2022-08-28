@@ -1,3 +1,4 @@
+import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class AppImage extends StatelessWidget {
@@ -14,10 +15,17 @@ class AppImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image(
-      image: AssetImage(image),
+    return Image.asset(
+      image,
       width: width,
       height: height,
+      errorBuilder: (context, error, stackTrace) {
+        return Image.asset(
+          AppImagesAsset.defaultAvatar,
+          width: width,
+          height: height,
+        );
+      },
     );
   }
 }
