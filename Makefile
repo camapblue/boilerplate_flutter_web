@@ -5,10 +5,13 @@ setup-env:
 	echo "Start setup Environment"
 	cp ./environments/$(ENV)/.env .env
 
-deploy:
+build-web:
 	make setup-env
+	flutter build web --dart-define env=$$(echo $$(cat .env | tr '\n' '|')) --web-renderer html --release --tree-shake-icons
+
+deploy:
 	firebase use $(ENV)
-	flutter build web --dart-define env=$$(echo $$(cat .env | tr '\n' '|')) --web-renderer html --release
+	make build-web
 	firebase deploy
 
 run:
