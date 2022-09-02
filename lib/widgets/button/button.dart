@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:boilerplate_flutter_web/theme/theme.dart';
@@ -51,13 +50,9 @@ class Button extends StatelessWidget {
             padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Center(
           child: loading
-              ? Theme(
-                  data: ThemeData(
-                    cupertinoOverrideTheme: CupertinoThemeData(
-                      brightness: indicatorBrightness,
-                    ),
-                  ),
-                  child: const CupertinoActivityIndicator())
+              ? const CircularProgressIndicator(
+                  color: Colors.black38,
+                )
               : Text(
                   title,
                   style: Theme.of(context).primaryButton.copyWith(

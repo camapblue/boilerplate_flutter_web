@@ -7,7 +7,11 @@ setup-env:
 
 build-web:
 	make setup-env
-	flutter build web --dart-define env=$$(echo $$(cat .env | tr '\n' '|')) --web-renderer html --release --tree-shake-icons
+	make package
+	cp ./assets/fonts/MaterialIcons-Regular.otf ./build/web/assets/fonts/MaterialIcons-Regular.otf
+
+package:
+	flutter build web --dart-define env=$$(echo $$(cat .env | tr '\n' '|')) --web-renderer html --release
 
 deploy:
 	firebase use $(ENV)
@@ -16,6 +20,5 @@ deploy:
 
 run:
 	make setup-env
-	firebase use $(ENV)
 	flutter run --dart-define env=$$(echo $$(cat .env | tr '\n' '|')) -d chrome --web-renderer html
 	

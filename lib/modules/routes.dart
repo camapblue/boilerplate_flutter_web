@@ -21,7 +21,10 @@ class AppRouter {
       middleware: [DeferredLoader(error.loadLibrary)],
     );
 
-    QR.settings.pagesType = const QFadePage();
+    QR.settings.pagesType = QCustomPage(
+      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+          child,
+    );
 
     QR.setUrlStrategy();
   }
