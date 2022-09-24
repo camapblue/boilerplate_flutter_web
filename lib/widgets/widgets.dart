@@ -1,6 +1,7 @@
 export 'app_image/app_image.dart';
 export 'menu_bar/menu_bar.dart';
-export 'button/button.dart';
+export 'button/x_button.dart';
+export 'button/x_link_button.dart';
 export 'button/ink_well_button.dart';
 export 'app_icon/app_icon.dart';
 export 'responsive/responsive_template_widget.dart';

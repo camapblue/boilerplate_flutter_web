@@ -1,4 +1,3 @@
-import 'package:boilerplate_flutter_web/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class InkWellButton extends StatelessWidget {
@@ -29,7 +28,7 @@ class InkWellButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        highlightColor: highlightColor ?? whiteColor.withOpacity(0.54),
+        highlightColor: highlightColor ?? Colors.white54,
         splashColor: splashColor ?? Colors.transparent,
         borderRadius: BorderRadius.circular(borderRadius),
         child: Container(

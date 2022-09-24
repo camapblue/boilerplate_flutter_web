@@ -1,4 +1,5 @@
 import 'package:boilerplate_flutter_web/blocs/blocs.dart';
+import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:boilerplate_flutter_web/global/global.dart';
 import 'package:boilerplate_flutter_web/widgets/widgets.dart';
 import 'package:common/common.dart';
@@ -92,7 +93,7 @@ class _LogInViewState extends XResponsiveTemplateWidget<LogInView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Spacer(),
-              Button.pink(
+              XButton.negative(
                 title: 'Log In',
                 onPressed: () {
                   final form = _formKey.currentState!;

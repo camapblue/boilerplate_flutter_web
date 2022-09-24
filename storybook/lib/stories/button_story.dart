@@ -4,68 +4,90 @@ import 'package:boilerplate_flutter_web/widgets/widgets.dart';
 import '../storybook.dart';
 
 // ignore_for_file: avoid_print
+// ignore: must_be_immutable
 class ButtonStory extends Story {
-  const ButtonStory({Key? key}) : super(key: key);
+  ButtonStory({Key? key}) : super(key: key);
 
   @override
   List<WidgetMap> storyContent() {
+    const sizedBoxSpace = SizedBox(height: 20);
     return [
       WidgetMap(
         title: 'Button',
-        builder: (context) => Padding(
+        builder: (context) => Container(
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: Container(),
-              ),
-              Button.pink(
-                title: 'BUTTON: Active',
-                onPressed: () => print('BUTTON: Active - pressed'),
-              ),
-              const SizedBox(height: 12),
-              Button.pink(title: 'BUTTON: Disabled'),
-              const SizedBox(height: 12),
-              Button.outlinedPink(
-                title: 'BUTTON: Active with Loading indicator',
-                loading: true,
-                onPressed: () =>
-                    print('BUTTON: Active with Loading indicator - pressed'),
-              ),
-              const SizedBox(height: 12),
-              Button.outlinedBlue(
-                title: 'OUTLINED BUTTON: Blue',
-                onPressed: () => print('OUTLINED BUTTON: Blue - pressed'),
-              ),
-              const SizedBox(height: 12),
-              Button.outlinedPink(
-                title: 'OUTLINED BUTTON: Pink',
-                onPressed: () => print('OUTLINED BUTTON: Pink - pressed'),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: Button.outlinedBlue(
-                      title: 'Pink',
-                      onPressed: () =>
-                          print('OUTLINED BUTTON: outlined Blue - pressed'),
+          color: Colors.black12,
+          alignment: Alignment.center,
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const Spacer(),
+                XButton.primary(
+                  title: 'Primary - Outline',
+                  style: XButtonStyle.outline,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  onPressed: () => debugPrint('>>>>> Pressed'),
+                ),
+                sizedBoxSpace,
+                XButton.primary(
+                  title: 'Primary - Solid',
+                  onPressed: () => debugPrint('>>>>> Pressed'),
+                ),
+                sizedBoxSpace,
+                XButton.primary(
+                  title: 'Primary - Text',
+                  style: XButtonStyle.text,
+                  onPressed: () => debugPrint('>>>>> Pressed'),
+                ),
+                sizedBoxSpace,
+                const XButton.primary(
+                  title: 'Primary - Disabled',
+                ),
+                sizedBoxSpace,
+                XButton.negative(
+                  title: 'Negative - Outline',
+                  style: XButtonStyle.outline,
+                  onPressed: () => debugPrint('>>>>> Pressed'),
+                ),
+                sizedBoxSpace,
+                XButton.negative(
+                  title: 'Negative - Solid',
+                  style: XButtonStyle.solid,
+                  onPressed: () => debugPrint('>>>>> Pressed'),
+                ),
+                sizedBoxSpace,
+                XButton.negative(
+                  title: 'Negative - Text',
+                  style: XButtonStyle.text,
+                  onPressed: () => debugPrint('>>>>> Pressed'),
+                ),
+                sizedBoxSpace,
+                XButton(
+                  title: 'Custom - Icon',
+                  child: SizedBox(
+                    height: 32,
+                    child: Row(
+                      children: const [
+                        Spacer(),
+                        Icon(
+                          Icons.arrow_back,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        Spacer(),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Button.outlinedPink(
-                      title: 'Pink',
-                      onPressed: () =>
-                          print('OUTLINED BUTTON: outlined Pink - pressed'),
-                    ),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Container(),
-              ),
-            ],
+                  onPressed: () => debugPrint('>>>>> Pressed'),
+                ),
+                sizedBoxSpace,
+                const Spacer(),
+              ],
+            ),
           ),
         ),
       )

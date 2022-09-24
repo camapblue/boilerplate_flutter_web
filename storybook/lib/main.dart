@@ -9,11 +9,12 @@ Future<void> main() async {
     Builder(
       builder: (BuildContext context) {
         return MaterialApp(
-          theme: loadTheme(),
+          theme: DefaultTheme().build(context),
           home: Storybook(
             [
-              const ButtonStory(), // Supermama
+              ButtonStory(), // Supermama
               MenuBarStory(),
+              TextStory(),
             ],
           ),
         );

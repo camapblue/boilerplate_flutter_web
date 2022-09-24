@@ -1,10 +1,11 @@
+import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:common/extension/color_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:boilerplate_flutter_web/theme/theme.dart';
 import 'package:boilerplate_flutter_web/widgets/widgets.dart';
 
 import '../storybook.dart';
 
+// ignore: must_be_immutable
 class MenuBarStory extends Story {
   final List<String> data = [
     'Bean',
@@ -31,14 +32,14 @@ class MenuBarStory extends Story {
           final menuController = MenuBarController();
 
           return Container(
-            color: lightColor,
+            color: Colors.white70,
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 MenuBar(
                   menuController: menuController,
-                  backgroundColor: redColorLight,
+                  backgroundColor: context.primaryColor,
                   totalItem: data.length,
                   itemBuilder: (index, selected) => Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -46,12 +47,12 @@ class MenuBarStory extends Story {
                     child: Text(
                       data[index],
                       style: selected
-                          ? Theme.of(context).primaryBold.copyWith(
-                                color: darkColor,
+                          ? context.displayMedium?.copyWith(
+                                color: Colors.black87,
                                 fontSize: 19,
                               )
-                          : Theme.of(context).primaryRegular.copyWith(
-                                color: grayColor,
+                          : context.displayMedium?.copyWith(
+                                color: Colors.grey,
                                 fontSize: 19,
                               ),
                     ),

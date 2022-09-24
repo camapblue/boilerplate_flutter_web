@@ -1,5 +1,5 @@
+import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:boilerplate_flutter_web/widgets/widgets.dart';
-import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 
 class XPasswordTextFormField extends StatefulWidget {

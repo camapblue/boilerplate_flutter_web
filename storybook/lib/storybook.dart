@@ -1,7 +1,7 @@
 library storybook;
 
 import 'package:flutter/material.dart';
-// import 'package:antamfoods_admin_app/models/models.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 export 'stateful_story.dart';
 
 /// A Storybook is a widget displaying a collection of [Story] widgets.
@@ -25,19 +25,68 @@ export 'stateful_story.dart';
 ///         ])));
 /// ```
 
-class Storybook extends StatelessWidget {
+class Storybook extends StatefulWidget {
   const Storybook(this.stories, {Key? key}) : super(key: key);
 
   final List<Story> stories;
 
   @override
+  State<Storybook> createState() => _StorybookState();
+}
+
+class _StorybookState extends State<Storybook> {
+  StoryScreen? _screen;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (kIsWeb) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (widget.stories.isNotEmpty) {
+          final screen = widget.stories.first.firstWidget;
+          if (screen != null) {
+            setState(() {
+              _screen = screen;
+            });
+          }
+        }
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Storybook')),
-      body: ListView.builder(
-        itemBuilder: (BuildContext context, int index) => stories[index],
-        itemCount: stories.length,
-      ),
+      body: kIsWeb
+          ? Row(
+              children: [
+                SizedBox(
+                  width: 300,
+                  child: ListView.builder(
+                    itemBuilder: (BuildContext context, int index) =>
+                        widget.stories[index]
+                          ..addOnStoryTapped(
+                            (screen) => setState(
+                              () {
+                                _screen = screen;
+                              },
+                            ),
+                          ),
+                    itemCount: widget.stories.length,
+                  ),
+                ),
+                Expanded(
+                  child: _screen ?? const SizedBox(),
+                ),
+              ],
+            )
+          : ListView.builder(
+              itemBuilder: (BuildContext context, int index) =>
+                  widget.stories[index],
+              itemCount: widget.stories.length,
+            ),
     );
   }
 }
@@ -73,18 +122,23 @@ class StoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar ??
-          AppBar(
-            title: Text(title),
-          ),
-      body: builder(context),
-    );
+    return kIsWeb
+        ? Scaffold(body: builder(context))
+        : Scaffold(
+            appBar: appBar ??
+                AppBar(
+                  title: Text(title),
+                ),
+            body: builder(context),
+          );
   }
 }
 
+typedef OnStoryTapped = void Function(StoryScreen);
+
+// ignore: must_be_immutable
 abstract class Story extends StatelessWidget {
-  const Story({Key? key}) : super(key: key);
+  Story({Key? key}) : super(key: key);
 
   List<WidgetMap> storyContent();
 
@@ -92,17 +146,40 @@ abstract class Story extends StatelessWidget {
 
   AppBar? get appBar => null;
 
+  OnStoryTapped? _onStoryTapped;
+
+  StoryScreen? get firstWidget {
+    final content = storyContent();
+    final storyScreen = StoryScreen(
+      content[0].title ?? title,
+      appBar,
+      content[0].builder,
+    );
+
+    return storyScreen;
+  }
+
+  // ignore: use_setters_to_change_properties
+  void addOnStoryTapped(OnStoryTapped onTapped) {
+    _onStoryTapped = onTapped;
+  }
+
   Widget _widgetTileLauncher(
           StoryBuilder builder, String title, BuildContext context) =>
       ListTile(
         leading: const Icon(Icons.launch),
         title: Text(title),
         onTap: () {
+          final storyScreen = StoryScreen(title, appBar, builder);
+          if (_onStoryTapped != null) {
+            _onStoryTapped!(storyScreen);
+            return;
+          }
           Navigator.push(
             context,
             MaterialPageRoute<void>(
               builder: (_) {
-                return StoryScreen(title, appBar, builder);
+                return storyScreen;
               },
             ),
           );

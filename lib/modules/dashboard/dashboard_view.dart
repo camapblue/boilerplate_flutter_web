@@ -1,8 +1,8 @@
 import 'package:boilerplate_flutter_web/blocs/blocs.dart';
+import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:boilerplate_flutter_web/global/global.dart';
 import 'package:boilerplate_flutter_web/modules/user_list/user_list_view.dart';
 import 'package:boilerplate_flutter_web/widgets/widgets.dart';
-import 'package:common/common.dart';
 import 'package:common/core/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 

@@ -50,7 +50,9 @@ class _BoilerplateWebAppState extends State<BoilerplateWebApp> {
             ),
             useInheritedMediaQuery: true,
             title: 'Boilerplate Web App',
-            theme: loadTheme(theme: state.theme),
+            theme: state.theme != null
+                ? loadTheme(theme: state.theme)
+                : DefaultTheme().build(context),
             debugShowCheckedModeBanner: false,
             restorationScopeId: 'Boilerplate Web App',
           );

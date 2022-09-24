@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:common/common.dart';
+import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
