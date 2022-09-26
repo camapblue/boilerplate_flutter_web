@@ -31,11 +31,11 @@ class UserServiceImpl implements UserService {
 
   @override
   Future<void> logOut() async {
-
+    await userRepository.clearLoggedInUser();
   }
 
   @override
   bool get isLoggedIn {
-    return true;
+    return userRepository.isSignedIn();
   }
 }

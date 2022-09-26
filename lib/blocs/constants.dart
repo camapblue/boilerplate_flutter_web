@@ -23,7 +23,6 @@ class _Blocs {
 
   // Common
   final Key showMessageBloc = const Key('show_message_bloc');
-  final Key themeBloc = const Key('theme_bloc');
   final Key languageBloc = const Key('language_bloc');
 
   // Authentication & Authorization

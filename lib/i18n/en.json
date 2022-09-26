@@ -1,5 +1,10 @@
 {
   "common.app_name": "Boilerplate Flutter Web",
   "common.loading": "Loading",
-  "navigation.menu.home": "Home"
+  "button.log_in": "Log In",
+  "button.forgot_password": "Forgot Password",
+  "navigation.menu.home": "Home",
+  "log_in.welcome_title": "Welcome to Boilerplate Flutter Web",
+  "log_in.welcome_subtitle": "Enjoy to your journey",
+  "log_in.welcome_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
 }

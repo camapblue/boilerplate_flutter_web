@@ -26,3 +26,7 @@ class SessionLoadSuccess extends SessionState {
 class SessionLoadFailure extends SessionState {
   SessionLoadFailure() : super(false);
 }
+
+class SessionLogOutSuccess extends SessionState {
+  SessionLogOutSuccess(): super(false, null);
+}

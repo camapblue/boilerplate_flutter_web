@@ -1,5 +1,6 @@
 import 'package:boilerplate_flutter_web/global/global.dart';
 import 'package:boilerplate_flutter_web/theme/theme.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,8 @@ class BoilerplateWebApp extends StatefulWidget {
 }
 
 class _BoilerplateWebAppState extends State<BoilerplateWebApp> {
+  final _botToastBuilder = BotToastInit();
+
   @override
   void initState() {
     super.initState();
@@ -31,32 +34,44 @@ class _BoilerplateWebAppState extends State<BoilerplateWebApp> {
         BlocProvider<SessionBloc>(
           create: (_) => SessionBloc.instance()..start(),
         ),
-        BlocProvider<ThemeBloc>(
-          create: (_) => ThemeBloc.instance(),
+        BlocProvider<LanguageBloc>(
+          create: (_) => LanguageBloc.instance(),
         )
       ],
       child: BlocListener<SessionBloc, SessionState>(
         listener: (_, state) {
           log.info('Session State >> $state');
+          if (state is SessionLogOutSuccess) {
+            AppNavigator().goWithName(RouteName.logIn);
+          } else if (state is SessionLoadSuccess) {
+            AppNavigator().go('/${RouteName.dashboard}');
+          }
         },
-        child: BlocBuilder<ThemeBloc, ThemeState>(builder: (_, state) {
-          return MaterialApp.router(
-            routeInformationParser: const QRouteInformationParser(),
-            routerDelegate: QRouterDelegate(
-              AppRouter.allRoutes(),
-              observers: [
-                AppRouteObserver(),
+        child: BlocBuilder<LanguageBloc, LanguageState>(
+          builder: (_, languageState) {
+            return MaterialApp.router(
+              routeInformationParser: const QRouteInformationParser(),
+              routerDelegate: QRouterDelegate(
+                AppRouter.allRoutes(),
+                observers: [
+                  AppRouteObserver(),
+                  BotToastNavigatorObserver(),
+                ],
+              ),
+              useInheritedMediaQuery: true,
+              title: 'Boilerplate Web App',
+              theme: DefaultTheme().build(context),
+              localizationsDelegates: const [
+                SLocalizationsDelegate(),
               ],
-            ),
-            useInheritedMediaQuery: true,
-            title: 'Boilerplate Web App',
-            theme: state.theme != null
-                ? loadTheme(theme: state.theme)
-                : DefaultTheme().build(context),
-            debugShowCheckedModeBanner: false,
-            restorationScopeId: 'Boilerplate Web App',
-          );
-        }),
+              supportedLocales: languageState.supportedLocales,
+              builder: _botToastBuilder,
+              locale: languageState.locale,
+              debugShowCheckedModeBanner: false,
+              restorationScopeId: 'Boilerplate Web App',
+            );
+          },
+        ),
       ),
     );
   }

@@ -14,7 +14,7 @@ part 'session_event.dart';
 part 'session_state.dart';
 
 class SessionBloc extends BaseBloc<SessionEvent, SessionState>
-    with ExceptionHandler {
+    with ExceptionHandler, Loader {
   final UserService userService;
 
   SessionBloc(Key key, {required this.userService})
@@ -32,6 +32,19 @@ class SessionBloc extends BaseBloc<SessionEvent, SessionState>
         userService: Provider().userService,
       ),
     );
+  }
+
+  @override
+  List<Broadcast> subscribes() {
+    return <Broadcast>[
+      Broadcast(
+        blocKey: Keys.Blocs.sessionBloc,
+        event: Keys.Broadcast.signInSuccess,
+        onNext: (_) {
+          add(const SessionLoaded());
+        },
+      ),
+    ];
   }
 
   bool get isSignedIn => userService.isLoggedIn;
@@ -61,11 +74,13 @@ class SessionBloc extends BaseBloc<SessionEvent, SessionState>
     if (!userService.isLoggedIn) {
       return;
     }
-
+    showGlobalLoading();
     try {
       await Future.delayed(const Duration(seconds: 2));
       await userService.logOut();
-      emit(SessionInitial());
+
+      hideGlobalLoading();
+      emit(SessionLogOutSuccess());
     } on Exception catch (e) {
       handleException(e);
     }

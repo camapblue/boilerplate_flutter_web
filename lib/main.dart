@@ -5,22 +5,19 @@ import 'package:common/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:repository/repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setEnabledSystemUIMode(
-    SystemUiMode.manual,
-    overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
-  );
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await Future.wait([
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
+    ),
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
+    Repository().initialize(),
+  ]);
+  Bloc.observer = SimpleBlocObserver();
 
-  // ignore: deprecated_member_use
-  BlocOverrides.runZoned(
-    () => runZonedGuarded(() {
-      runApp(const BoilerplateWebApp());
-    }, (error, stackTrace) {
-      debugPrint('>>>>> ${error.toString()}');
-    }),
-    blocObserver: SimpleBlocObserver(),
-  );
+  runApp(const BoilerplateWebApp());
 }

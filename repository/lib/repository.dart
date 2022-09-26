@@ -2,7 +2,9 @@ library repository;
 
 import 'package:repository/client/client.dart';
 import 'package:repository/configs.dart';
+import 'package:repository/dao/dao.dart';
 import 'package:repository/repository/repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 export 'exception/exception.dart';
 export 'model/model.dart';
@@ -17,11 +19,17 @@ class Repository {
 
   Repository._internal();
 
+  Future<void> initialize() async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+  }
+
   String? accessToken;
+  late SharedPreferences _sharedPreferences;
 
   // Repository
   UserRepository get userRepository => UserRepositoryImpl(
         userClient: userClient,
+        userDao: userDao,
       );
 
   // Client
@@ -29,4 +37,7 @@ class Repository {
         host: Configs().baseURL,
         authorization: accessToken,
       );
+
+  // Dao
+  UserDao get userDao => UserDaoImpl(preferences: _sharedPreferences);
 }

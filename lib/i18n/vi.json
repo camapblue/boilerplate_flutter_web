@@ -1,5 +1,10 @@
 {
   "common.app_name": "Hệ Thống Quản Lí",
   "common.loading": "Đang Tải",
-  "navigation.menu.home": "Home"
+  "button.log_in": "Đăng Nhập",
+  "button.forgot_password": "Quên Mật Khẩu",
+  "navigation.menu.home": "Home",
+  "log_in.welcome_title": "Chào mừng Boilerplate Flutter Web",
+  "log_in.welcome_subtitle": "Bắt đầu hành trình ngay và luôn",
+  "log_in.welcome_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
 }

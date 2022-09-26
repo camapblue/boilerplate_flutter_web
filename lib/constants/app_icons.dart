@@ -5,6 +5,10 @@ enum AppIcons {
   placeholder,
   empty,
   info,
+  notificationClose,
+  notificationNeutral,
+  notificationPositive,
+  notificationNegative,
 }
 
 const _AppIconsAsset = {
@@ -12,6 +16,10 @@ const _AppIconsAsset = {
   AppIcons.placeholder: 'assets/icons/placeholder.svg',
   AppIcons.empty: 'assets/icons/empty.svg',
   AppIcons.info: 'assets/icons/info.svg',
+  AppIcons.notificationClose: 'assets/icons/notification_close.svg',
+  AppIcons.notificationNegative: 'assets/icons/notification_negative.svg',
+  AppIcons.notificationNeutral: 'assets/icons/notification_neutral.svg',
+  AppIcons.notificationPositive: 'assets/icons/notification_positive.svg',
 };
 
 extension AppIconsExtension on AppIcons {

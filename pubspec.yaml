@@ -46,6 +46,7 @@ dependencies:
   qlevar_router: ^1.6.2
   flutter_keyboard_visibility: ^5.3.0
   cached_network_image: ^3.2.1
+  bot_toast: ^4.0.3
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/icons/
     - test_data/
     - lib/i18n/
 

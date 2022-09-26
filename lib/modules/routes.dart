@@ -75,6 +75,7 @@ class AuthorizationValidation extends QMiddleware {
   Future onEnter() async {
     final bloc = EventBus().blocFromKey<SessionBloc>(Keys.Blocs.sessionBloc);
     final isSignedIn = bloc?.isSignedIn ?? false;
+    
     if (authenticated && !isSignedIn) {
       unawaited(AppNavigator().go('/${RouteName.logIn}'));
     } else if (!authenticated && isSignedIn) {

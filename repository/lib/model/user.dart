@@ -14,6 +14,15 @@ class User extends Entity {
     required this.role,
   });
 
+  factory User.test() {
+    return User(
+      id: 'user_id',
+      name: 'name',
+      email: 'email',
+      role: AdminRole.admin,
+    );
+  }
+
   // ignore: prefer_constructors_over_static_methods
   static User fromJson(dynamic json) {
     return User(

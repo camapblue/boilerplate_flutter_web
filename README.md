@@ -13,6 +13,24 @@ This project is a Boilerplate of Web App that building by Flutter.
 - Always think about & follow up **SOLID principal** for every solutions
 - Naming is **VERY VERY IMPORTANT**, it's not coding, it's solution
 
+## What Done In Boilerplate
+
+- [x] Application skeleton follow Clean Architecture + Bloc Pattern
+- [x] Dependency Injection for all layers
+- [x] Navigation Routers
+- [x] Localization Supports
+- [x] Restful API + Json Parser
+- [x] Mock Data Support
+- [x] Common UI components (Text, TextField, Button, Menu, ...)
+- [x] Theme Management
+- [x] Assets Loader (icons, fonts, images)
+- [x] Storybook
+- [x] Some CI/CD scripts for run, build, test coverage, ...
+- [x] Optimize performance with MaterialIcons & Deffered Loader
+- [x] Logger
+- [x] LoadList flow (Widget + Bloc + Service)
+- [x] Environments Configuration
+
 ## Architecture
 
 Apply Clean Architecture + BloC pattern 
