@@ -1,32 +1,36 @@
 part of 'session_bloc.dart';
 
 abstract class SessionState extends Equatable {
-  final bool isSignedIn;
   final User? loggedInUser;
   final DateTime updatedDate;
 
-  SessionState(this.isSignedIn, [this.loggedInUser])
-      : updatedDate = DateTime.now();
+  SessionState([this.loggedInUser]) : updatedDate = DateTime.now();
 
   @override
   List<Object?> get props => [updatedDate];
 }
 
 class SessionInitial extends SessionState {
-  SessionInitial() : super(false);
+  SessionInitial() : super();
 }
 
-class SessionLoadSuccess extends SessionState {
-  SessionLoadSuccess({
-    required bool isSignedIn,
-    User? loggedInUser,
-  }) : super(isSignedIn, loggedInUser);
+class SessionLoadInProgress extends SessionState {
+  SessionLoadInProgress() : super();
+}
+
+class SessionUserLogInSuccess extends SessionState {
+  SessionUserLogInSuccess({
+    required User user,
+  }) : super(
+          user,
+        );
 }
 
 class SessionLoadFailure extends SessionState {
-  SessionLoadFailure() : super(false);
+  SessionLoadFailure() : super();
 }
 
-class SessionLogOutSuccess extends SessionState {
-  SessionLogOutSuccess(): super(false, null);
+class SessionSignOutSuccess extends SessionState {
+  SessionSignOutSuccess() : super();
 }
+

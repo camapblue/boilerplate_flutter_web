@@ -157,7 +157,7 @@ class XButton extends StatelessWidget {
                   borderRadius: xRadius,
                   color: context.backgroundSubdued,
                   border: Border.all(
-                    color: context.disabledColor,
+                    color: context.borderColor,
                     width: 1.0,
                   ),
                 ),
@@ -224,7 +224,7 @@ class XButton extends StatelessWidget {
       case XButtonStyle.text:
         return context.cardColor;
       default:
-        return context.disabledColor;
+        return context.borderColor;
     }
   }
 

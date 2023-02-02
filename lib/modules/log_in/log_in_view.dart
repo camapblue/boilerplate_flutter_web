@@ -15,106 +15,102 @@ class LogInView extends StatefulWidget {
 }
 
 class _LogInViewState extends XResponsiveTemplateWidget<LogInView> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
-  final _emailFocusNode = FocusNode();
-  final _passwordFocusNode = FocusNode();
-  int _emailFocusTimes = 0;
-  int _passwordFocusTimes = 0;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _emailFocusNode.addListener(() {
-      setState(() {
-        _emailFocusTimes++;
-      });
-    });
-
-    _passwordFocusNode.addListener(() {
-      setState(() {
-        _passwordFocusTimes++;
-      });
-    });
-  }
-
-  AutovalidateMode _handleOutFocus(bool hasFocus, int focusTimes) {
-    if (!hasFocus && focusTimes > 1) {
-      return AutovalidateMode.always;
-    }
-
-    return AutovalidateMode.disabled;
-  }
+  bool _validEmail = false;
+  bool _validPassword = false;
+  String? _emailErrorMessage;
+  String? _passwordErrorMessage;
 
   Widget _buildForm() {
     return SizedBox(
       width: double.infinity,
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 24),
-            XTextFormField(
-              controller: _emailTextController,
-              labelText: 'Email',
-              hintText: 'Enter your email...',
-              validator: _validateEmail,
-              prefixWidget: const Icon(
-                Icons.email,
-                size: 15,
-              ),
-              focusNode: _emailFocusNode,
-              autoValidateMode: _handleOutFocus(
-                _emailFocusNode.hasFocus,
-                _emailFocusTimes,
-              ),
-            ),
-            const SizedBox(height: 24.5),
-            XPasswordTextFormField(
-              controller: _passwordTextController,
-              labelText: 'Password',
-              hintText: 'Enter your password...',
-              validator: _validatePassword,
-              showForgotPwd: false,
-              errorIcon: Icon(
-                Icons.warning_amber_rounded,
-                color: context.errorColor,
-              ),
-              focusNode: _passwordFocusNode,
-              autoValidateMode: _handleOutFocus(
-                _passwordFocusNode.hasFocus,
-                _passwordFocusTimes,
-              ),
-            ),
-            const SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                XLinkButton(
-                  title: S.of(context).translate(Strings.Button.forgotPassword),
+      child: BlocListener<SessionBloc, SessionState>(
+        listener: (_, state) {
+          if (state is SessionUserLogInSuccess) {
+            AppRouting().pushReplacementNamed(RouteName.Dashboard.name);
+          } else if (state is SessionLoadFailure) {}
+        },
+        child: BlocConsumer<SignInBloc, SignInState>(listener: (_, state) {
+          
+        }, builder: (_, state) {
+          final loading = state is SignInRequestInProgress;
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ValidatorInput(
+                title: context.translate(Strings.LogIn.emailTitle),
+                placeholder: context.translate(Strings.LogIn.emailPlaceholder),
+                onFieldSubmitted: print,
+                textInputAction: TextInputAction.next,
+                onValid: (value) {
+                  setState(() {
+                    _validEmail = value != null;
+                    _emailErrorMessage = null;
+                  });
+                },
+                keyboardType: TextInputType.emailAddress,
+                textController: _emailTextController,
+                errorMessage: _emailErrorMessage,
+                prefixIcon: const Padding(
+                  padding: EdgeInsets.only(left: 8.0),
+                  child: Icon(
+                    Icons.email_outlined,
+                    color: AppColors.dark,
+                    size: 20,
+                  ),
                 ),
-                const Spacer(),
-                BlocBuilder<SignInBloc, SignInState>(
-                  builder: (_, state) {
-                    final isSubmitting = state is SignInRequestInProgress;
-
-                    return XButton.primary(
-                      title: S.of(context).translate(Strings.Button.logIn),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      loading: isSubmitting,
-                      onPressed: () {
-                        final form = _formKey.currentState!;
-                        if (!form.validate()) {
-                          return;
-                        }
+                validatorRules: [
+                  InputValidatorRule.require(
+                    errorMessage: context.translate(
+                      Strings.LogIn.validatorEmailIsRequired,
+                    ),
+                  ),
+                  InputValidatorRule(
+                    validator: (input) => input != null && input.isEmail(),
+                    errorMessage: context.translate(
+                      Strings.LogIn.validatorEmailIsInvalid,
+                    ),
+                  ),
+                ],
+              ),
+              PasswordInput(
+                title: context.translate(Strings.LogIn.passwordTitle),
+                placeholder: context.translate(
+                  Strings.LogIn.passwordPlaceholder,
+                ),
+                onFieldSubmitted: print,
+                passwordRule: InputValidatorRule(
+                  errorMessage: context.translate(
+                    Strings.LogIn.validatorPasswordIsInvalid,
+                  ),
+                  validator: (input) => input != null && input.length > 6,
+                ),
+                textController: _passwordTextController,
+                errorMessage: _passwordErrorMessage,
+                onValid: (value) {
+                  setState(() {
+                    _validPassword = value != null;
+                    _passwordErrorMessage = null;
+                  });
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 12.0),
+                child: XLinkButton(
+                  title: context.translate(Strings.LogIn.buttonForgotPassword),
+                  fontSize: 13,
+                  onPressed: () {
+                    
+                  },
+                ),
+              ),
+              const SizedBox(height: 24),
+              XButton.primary(
+                title: context.translate(Strings.Button.logIn),
+                onPressed: _validEmail && _validPassword
+                    ? () {
                         EventBus().event<SignInBloc>(
                           Keys.Blocs.signInBloc,
                           SignInFormSubmitted(
@@ -122,65 +118,38 @@ class _LogInViewState extends XResponsiveTemplateWidget<LogInView> {
                             password: _passwordTextController.text,
                           ),
                         );
+                      }
+                    : null,
+                loading: loading,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  const Spacer(),
+                  XText.bodyMedium(
+                    context.translate(Strings.LogIn.dontHaveAccount),
+                  ).customWith(
+                    context,
+                    color: AppColors.lightGray,
+                    fontSize: 13,
+                  ),
+                  const SizedBox(width: 4),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: XLinkButton(
+                      title: context.translate(Strings.LogIn.buttonSignUpNow),
+                      fontSize: 13,
+                      onPressed: () {
+                        
                       },
-                    );
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            BlocListener<SessionBloc, SessionState>(
-              listenWhen: (previous, current) =>
-                  current is SessionLoadFailure ||
-                  current is SessionLoadSuccess,
-              listener: (_, state) {
-                if (state is SessionLoadFailure) {
-                }
-              },
-              child: const SizedBox(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _emailTextController.dispose();
-    _passwordTextController.dispose();
-    _emailFocusNode.dispose();
-    _passwordFocusNode.dispose();
-
-    super.dispose();
-  }
-
-  Widget _buildWelcomeWidget(
-    BuildContext context, {
-    EdgeInsetsGeometry? padding,
-  }) {
-    return Container(
-      padding: padding ?? const EdgeInsets.all(8.0),
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const AppIcon(
-              width: 111.0, height: 111.0, icon: AppIcons.placeholder),
-          const SizedBox(height: 20.0),
-          XText.displayMedium(
-            S.of(context).translate(Strings.LogIn.welcomeTitle),
-          ),
-          const SizedBox(height: 16.0),
-          XText.bodySmall(
-            S.of(context).translate(Strings.LogIn.welcomeSubtitle),
-          ),
-          const SizedBox(height: 16.0),
-          XText.bodyMedium(
-            S.of(context).translate(Strings.LogIn.welcomeDescription),
-          ),
-        ],
+                    ),
+                  ),
+                  const Spacer(),
+                ],
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
@@ -197,32 +166,41 @@ class _LogInViewState extends XResponsiveTemplateWidget<LogInView> {
 
   @override
   Widget webLayout(BuildContext context) {
-    return XTwoColumnResponsive(
-      headerLayout: _buildWelcomeWidget(context),
-      contentLayout: BlocListener<SignInBloc, SignInState>(
-        listener: (_, state) {
-          log.info('Super Admin Logged In Success');
-          if (state is SignInFailure) {}
-        },
-        child: _buildForm(),
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          width: 720,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                AppImagesAsset.logInBackground,
+              ),
+              fit: BoxFit.fill,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: SizedBox(
+              width: 360,
+              height: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Spacer(),
+                  XText.bodyMedium(context.translate(Strings.LogIn.subtitle)),
+                  const SizedBox(height: 8),
+                  XText.displayMedium(context.translate(Strings.LogIn.title)),
+                  const SizedBox(height: 32),
+                  _buildForm(),
+                  const Spacer(),
+                ],
+              ),
+            ),
+          ),
+        )
+      ],
     );
-  }
-
-  String? _validatePassword(String? value) {
-    if (value.isNullOrEmpty()) {
-      return 'Password is empty';
-    }
-    return null;
-  }
-
-  String? _validateEmail(String? value) {
-    if (value.isNullOrEmpty()) {
-      return 'Email is empty';
-    }
-    if (!value!.isEmail()) {
-      return 'Email is invalid';
-    }
-    return null;
   }
 }

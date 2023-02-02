@@ -1,8 +1,34 @@
+import 'package:boilerplate_flutter_web/global/global.dart';
+import 'package:boilerplate_flutter_web/models/models.dart';
 import 'package:flutter/material.dart';
 
 extension AppContext on BuildContext {
   
   ThemeData get theme => Theme.of(this);
+
+  static ScreenSize screenSize = ScreenSize.big;
+
+  String translate(
+    String key, {
+    String suffix = '',
+    List<dynamic> params = const [],
+    bool checkNumberParams = false,
+  }) {
+    return S.of(this).translate(
+          key,
+          suffix: suffix,
+          params: params,
+          checkNumberParams: checkNumberParams,
+        );
+  }
+
+  double responsiveSized(double size) {
+    return size * screenSize.ratio();
+  }
+
+  double responsiveSizes(List<double> sizes) {
+    return sizes[screenSize.index];
+  }
 
   /// ----------- Text style ----------- ///
 
@@ -63,6 +89,8 @@ extension AppContext on BuildContext {
   Color get backgroundColor => theme.colorScheme.background;
 
   Color get disabledColor => theme.disabledColor;
+
+  Color get borderColor => theme.disabledColor.withOpacity(.6);
 
   Color get disabledBackgroundColor => theme.disabledColor.withOpacity(.2);
 

@@ -128,7 +128,7 @@ class XTextFormFieldState extends State<XTextFormField> {
       isDense: true,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(widget.radius),
-        borderSide: BorderSide(color: context.disabledColor, width: 2),
+        borderSide: BorderSide(color: context.borderColor, width: 2),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(widget.radius),
@@ -136,7 +136,7 @@ class XTextFormFieldState extends State<XTextFormField> {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(widget.radius),
-        borderSide: BorderSide(color: context.disabledColor, width: 2),
+        borderSide: BorderSide(color: context.borderColor, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(widget.radius),
@@ -144,7 +144,7 @@ class XTextFormFieldState extends State<XTextFormField> {
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(widget.radius),
-        borderSide: BorderSide(color: context.disabledColor),
+        borderSide: BorderSide(color: context.borderColor),
       ),
       counterText: '',
       alignLabelWithHint: true,

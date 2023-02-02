@@ -4,7 +4,19 @@
   "button.log_in": "Log In",
   "button.forgot_password": "Forgot Password",
   "navigation.menu.home": "Home",
-  "log_in.welcome_title": "Welcome to Boilerplate Flutter Web",
-  "log_in.welcome_subtitle": "Enjoy to your journey",
-  "log_in.welcome_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+  "log_in.sign_up_now": "Sign Up Now",
+  "log_in.dont_have_account": "Don't Have An Account?",
+  "log_in.title": "Login to your account",
+  "log_in.subtitle": "Welcome back",
+  "log_in.email_title": "Email",
+  "log_in.email_placeholder": "Type your email",
+  "log_in.password_title": "Password",
+  "log_in.password_placeholder": "Type your password",
+  "log_in.button.forgot_password": "Forgot Password?",
+  "log_in.button.sign_up_now": "Sign Up Now",
+  "log_in.validator.email_is_required": "Email is required",
+  "log_in.validator.email_is_invalid": "Email is invalid format",
+  "log_in.validator.password_is_invalid": "Invalid password",
+  "log_in.error.email_not_found": "Email not found",
+  "log_in.error.email_wrong_password": "Wrong password"
 }

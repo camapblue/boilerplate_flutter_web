@@ -14,12 +14,15 @@ part 'session_event.dart';
 part 'session_state.dart';
 
 class SessionBloc extends BaseBloc<SessionEvent, SessionState>
-    with ExceptionHandler, Loader {
+    with ExceptionHandler {
   final UserService userService;
 
-  SessionBloc(Key key, {required this.userService})
-      : super(key, initialState: SessionInitial()) {
+  SessionBloc(
+    Key key, {
+    required this.userService,
+  }) : super(key, initialState: SessionInitial()) {
     on<SessionLoaded>(_onSessionLoaded);
+    on<SessionUserLoggedIn>(_onSessionUserLoggedIn);
     on<SessionLoggedOut>(_onSessionLoggedOut);
   }
 
@@ -36,37 +39,56 @@ class SessionBloc extends BaseBloc<SessionEvent, SessionState>
 
   @override
   List<Broadcast> subscribes() {
-    return <Broadcast>[
+    return [
       Broadcast(
-        blocKey: Keys.Blocs.sessionBloc,
+        blocKey: key,
         event: Keys.Broadcast.signInSuccess,
-        onNext: (_) {
-          add(const SessionLoaded());
+        onNext: (data) {
+          final User user = data['user'];
+
+          add(SessionUserLoggedIn(user));
         },
       ),
     ];
   }
 
-  bool get isSignedIn => userService.isLoggedIn;
+  bool get isSignedIn =>
+      userService.isLoggedIn;
 
   void start() {
-    add(const SessionLoaded());
+    if (state is SessionInitial) {
+      add(const SessionLoaded());
+    }
+  }
+
+  Future<void> _onSessionUserLoggedIn(
+      SessionUserLoggedIn event, Emitter<SessionState> emit) async {
+    emit(
+      SessionUserLogInSuccess(
+        user: event.loggedInUser,
+      ),
+    );
   }
 
   Future<void> _onSessionLoaded(
       SessionLoaded event, Emitter<SessionState> emit) async {
-    if (!userService.isLoggedIn) {
-      emit(SessionLoadSuccess(isSignedIn: false));
-    } else {
-      try {
-        final user = await userService.getUserProfile();
+    emit(SessionLoadInProgress());
+    
+    try {
+        final loggedInUser = await userService.getUserProfile();
 
-        emit(SessionLoadSuccess(isSignedIn: true, loggedInUser: user));
+        emit(
+          SessionUserLogInSuccess(
+            user: loggedInUser,
+          ),
+        );
       } catch (e) {
-        unawaited(userService.logOut());
-        emit(SessionLoadFailure());
+        if (e is UnauthorisedException) {
+          emit(SessionSignOutSuccess());
+        } else {
+          emit(SessionLoadFailure());
+        }
       }
-    }
   }
 
   Future<void> _onSessionLoggedOut(
@@ -74,13 +96,9 @@ class SessionBloc extends BaseBloc<SessionEvent, SessionState>
     if (!userService.isLoggedIn) {
       return;
     }
-    showGlobalLoading();
-    try {
-      await Future.delayed(const Duration(seconds: 2));
-      await userService.logOut();
 
-      hideGlobalLoading();
-      emit(SessionLogOutSuccess());
+    try {
+      emit(SessionSignOutSuccess());
     } on Exception catch (e) {
       handleException(e);
     }
