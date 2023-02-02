@@ -194,6 +194,7 @@ class XText extends StatelessWidget {
     Color? color,
     double? fontSize,
     FontStyle? fontStyle,
+    FontWeight? fontWeight,
   }) {
     final currentStyle = style ?? xStyle.getTextStyle(context);
     return XText(
@@ -201,7 +202,11 @@ class XText extends StatelessWidget {
       key: key,
       xStyle: xStyle,
       style: currentStyle?.copyWith(
-          color: color, fontSize: fontSize, fontStyle: fontStyle),
+        color: color,
+        fontSize: fontSize,
+        fontStyle: fontStyle,
+        fontWeight: fontWeight,
+      ),
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: overflow,

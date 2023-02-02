@@ -8,6 +8,7 @@ class InkWellButton extends StatelessWidget {
   final double borderRadius;
   final Color? highlightColor;
   final Color? splashColor;
+  final Color? backgroundColor;
   final Widget child;
 
   const InkWellButton({
@@ -18,6 +19,7 @@ class InkWellButton extends StatelessWidget {
     this.padding = const EdgeInsets.all(4),
     this.borderRadius = 4,
     this.highlightColor,
+    this.backgroundColor,
     this.splashColor,
     required this.child,
   }) : super(key: key);
@@ -26,17 +28,23 @@ class InkWellButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        highlightColor: highlightColor ?? Colors.white54,
-        splashColor: splashColor ?? Colors.transparent,
-        borderRadius: BorderRadius.circular(borderRadius),
-        child: Container(
-          width: width,
-          height: height,
-          padding: padding,
-          child: Center(
-            child: child,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(borderRadius),
+          color: backgroundColor ?? Colors.transparent,
+        ),
+        child: InkWell(
+          onTap: onTap,
+          highlightColor: highlightColor ?? Colors.white54,
+          splashColor: splashColor ?? Colors.transparent,
+          borderRadius: BorderRadius.circular(borderRadius),
+          child: Container(
+            width: width,
+            height: height,
+            padding: padding,
+            child: Center(
+              child: child,
+            ),
           ),
         ),
       ),

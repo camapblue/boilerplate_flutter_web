@@ -23,6 +23,7 @@ class XButton extends StatelessWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final bool loading;
+  final int? maxLines;
 
   const XButton({
     Key? key,
@@ -41,6 +42,7 @@ class XButton extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.loading = false,
+    this.maxLines,
   }) : super(key: key);
 
   const XButton.primary({
@@ -60,6 +62,7 @@ class XButton extends StatelessWidget {
     this.suffixIcon,
     this.prefixIcon,
     this.loading = false,
+    this.maxLines,
   }) : super(key: key);
 
   const XButton.positive({
@@ -79,6 +82,7 @@ class XButton extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.loading = false,
+    this.maxLines,
   }) : super(key: key);
 
   const XButton.negative({
@@ -98,12 +102,33 @@ class XButton extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.loading = false,
+    this.maxLines,
+  }) : super(key: key);
+
+  const XButton.outlined({
+    Key? key,
+    this.style = XButtonStyle.outline,
+    this.onPressed,
+    this.title,
+    this.child,
+    this.color,
+    this.solidTextColor,
+    this.padding,
+    this.borderRadius,
+    this.width,
+    this.suffixIcon,
+    this.prefixIcon,
+    this.loading = false,
+    this.maxLines,
+    this.type = XButtonType.positive,
+    this.prefixIconColor,
+    this.textStyle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final primaryColor = color ?? _getColor(context);
-    final xRadius = borderRadius ?? BorderRadius.circular(100.0);
+    final xRadius = borderRadius ?? BorderRadius.circular(8);
     final isEnabled = onPressed != null;
     final textColor = _getTextColor(context, primaryColor);
 
@@ -130,7 +155,11 @@ class XButton extends StatelessWidget {
                 )
               : BoxDecoration(
                   borderRadius: xRadius,
-                  color: context.disabledColor,
+                  color: context.backgroundSubdued,
+                  border: Border.all(
+                    color: context.disabledColor,
+                    width: 1.0,
+                  ),
                 ),
           child: child ??
               Center(
@@ -143,9 +172,11 @@ class XButton extends StatelessWidget {
                   ],
                   XText.labelLarge(
                     title,
+                    maxLines: maxLines,
+                    overflow: TextOverflow.ellipsis,
                   ).customWith(
                     context,
-                    color: textColor.withOpacity(isEnabled ? 1.0 : 0.7),
+                    color: isEnabled ? textColor : context.disabledColor,
                   ),
                   if (suffixIcon != null && !loading) ...[
                     const SizedBox(width: 8),

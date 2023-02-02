@@ -4,7 +4,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 typedef OnItemChanged = Function(int page);
 typedef MenuItemBuilder = Widget Function(int index, bool selected);
 
-class MenuBarController {
+class XMenuBarController {
   void Function(int)? navigateToItem;
 
   void jumpTo(int index) {
@@ -14,8 +14,8 @@ class MenuBarController {
   }
 }
 
-class MenuBar extends StatefulWidget {
-  const MenuBar({
+class XMenuBar extends StatefulWidget {
+  const XMenuBar({
     Key? key,
     this.menuController,
     this.onItemChanged,
@@ -30,7 +30,7 @@ class MenuBar extends StatefulWidget {
     this.noSelectedItem = false,
   }) : super(key: key);
 
-  final MenuBarController? menuController;
+  final XMenuBarController? menuController;
   final OnItemChanged? onItemChanged;
   final MenuItemBuilder itemBuilder;
   final int totalItem;
@@ -43,10 +43,10 @@ class MenuBar extends StatefulWidget {
   final bool noSelectedItem;
 
   @override
-  State<MenuBar> createState() => _MenuBarState();
+  State<XMenuBar> createState() => _XMenuBarState();
 }
 
-class _MenuBarState extends State<MenuBar> {
+class _XMenuBarState extends State<XMenuBar> {
   int _selectedIndex = 0;
   final itemScrollController = ItemScrollController();
   final itemPositionsListener = ItemPositionsListener.create();

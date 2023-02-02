@@ -7,11 +7,21 @@ class AppImage extends StatelessWidget {
     required this.image,
     this.width,
     this.height,
+    this.fit,
   }) : super(key: key);
 
   final String image;
   final double? width;
   final double? height;
+  final BoxFit? fit;
+
+  factory AppImage.appIcon({double width = 136, double height = 33}) {
+    return AppImage(
+      image: AppImagesAsset.appIcon,
+      width: width,
+      height: height,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +34,7 @@ class AppImage extends StatelessWidget {
           AppImagesAsset.defaultAvatar,
           width: width,
           height: height,
+          fit: fit,
         );
       },
     );

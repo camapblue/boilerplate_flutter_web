@@ -96,11 +96,8 @@ class EventBus {
   }
 
   void unhandle(Key blocKey) {
-    for (final b in _blocs.entries) {
-      if (b.key == blocKey || b.value.closeWithBlocKey == blocKey) {
-        _blocs.remove(blocKey);
-      }
-    }
+    _blocs.removeWhere(
+        (key, value) => key == blocKey || value.closeWithBlocKey == blocKey);
   }
 
   void _retryEvent<T extends BaseBloc>(Key key) {
@@ -118,13 +115,14 @@ class EventBus {
   void cleanUp({Key? parentKey}) {
     final removedKeys = <Key>[];
     final closeKey = parentKey ?? const ValueKey('none_dispose_bloc');
+
     for (final b in _blocs.entries) {
       if (b.value.closeWithBlocKey == closeKey) {
         removedKeys.add(b.key);
-        _blocs.remove(closeKey);
       }
     }
-    
+    _blocs.removeWhere((key, value) => value.closeWithBlocKey == closeKey);
+
     _broadcasts.removeWhere((b) {
       return removedKeys.contains(b.blocKey);
     });

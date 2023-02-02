@@ -6,8 +6,6 @@ import 'package:flutter/services.dart';
 
 import 'z_text_form_field.dart';
 
-// import 'z_text_form_field.dart';
-
 class XTextFormField extends StatefulWidget {
   final TextEditingController? controller;
   final String? hintText;
@@ -42,6 +40,9 @@ class XTextFormField extends StatefulWidget {
   final double? errorContainerHeight;
   final TextStyle? errorTextStyle;
   final AutovalidateMode? autoValidateMode;
+  final EdgeInsets? padding;
+  final double prefixIconHeight;
+  final double suffixIconHeight;
 
   const XTextFormField({
     Key? key,
@@ -78,6 +79,9 @@ class XTextFormField extends StatefulWidget {
     this.errorContainerHeight,
     this.errorTextStyle,
     this.autoValidateMode,
+    this.padding,
+    this.prefixIconHeight = double.infinity,
+    this.suffixIconHeight = double.infinity,
   }) : super(key: key);
 
   @override
@@ -121,16 +125,18 @@ class XTextFormFieldState extends State<XTextFormField> {
 
   InputDecoration _buildInputDecoration(BuildContext context) {
     return InputDecoration(
+      isDense: true,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(widget.radius),
+        borderSide: BorderSide(color: context.disabledColor, width: 2),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(widget.radius),
-        borderSide: BorderSide(color: context.primaryColor, width: 1.5),
+        borderSide: BorderSide(color: context.primaryColor, width: 2),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(widget.radius),
-        borderSide: BorderSide(color: context.primaryColor),
+        borderSide: BorderSide(color: context.disabledColor, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(widget.radius),
@@ -142,7 +148,8 @@ class XTextFormFieldState extends State<XTextFormField> {
       ),
       counterText: '',
       alignLabelWithHint: true,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+      contentPadding: widget.padding ??
+          const EdgeInsets.symmetric(horizontal: 15, vertical: 16),
       filled: true,
       hintText: widget.hintText,
       hintStyle: context.labelSmall?.copyWith(color: context.disabledColor),
@@ -167,6 +174,12 @@ class XTextFormFieldState extends State<XTextFormField> {
               child: widget.suffixWidget,
             )
           : null,
+      prefixIconConstraints: BoxConstraints(
+        maxHeight: widget.prefixIconHeight,
+      ),
+      suffixIconConstraints: BoxConstraints(
+        maxHeight: widget.suffixIconHeight,
+      ),
     );
   }
 }

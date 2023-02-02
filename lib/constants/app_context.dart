@@ -60,7 +60,7 @@ extension AppContext on BuildContext {
 
   Color get scaffoldBackgroundColor => theme.scaffoldBackgroundColor;
 
-  Color get backgroundColor => theme.backgroundColor;
+  Color get backgroundColor => theme.colorScheme.background;
 
   Color get disabledColor => theme.disabledColor;
 
@@ -69,4 +69,14 @@ extension AppContext on BuildContext {
   Color? get textColor => theme.textTheme.labelLarge?.color;
 
   Color? get iconColor => theme.iconTheme.color;
+
+  Color get backgroundSubdued => const Color(0XFFF4F4F5);
+
+  Color get primarySubdued => const Color(0XFF9ED2FF);
+
+  Color get onBackgroundColor => theme.colorScheme.onBackground;
+
+  Color get textColorDisabled => theme.disabledColor.withOpacity(0.35);
+
+  Color get primaryColorDark => theme.colorScheme.primaryContainer;
 }
