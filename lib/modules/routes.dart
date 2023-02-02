@@ -38,8 +38,8 @@ class AppRouter {
         middleware: [DeferredLoader(splash.loadLibrary)],
       ),
       QRoute(
-        path: '/${RouteName.dashboard}',
-        name: RouteName.dashboard,
+        path: RouteName.Dashboard.path,
+        name: RouteName.Dashboard.name,
         builder: () => MultiBlocProvider(
           providers: [
             Provider().BlocProvider.userList(Keys.Blocs.userListBloc),
@@ -52,8 +52,8 @@ class AppRouter {
         ],
       ),
       QRoute(
-        path: '/${RouteName.logIn}',
-        name: RouteName.logIn,
+        path: RouteName.LogIn.path,
+        name: RouteName.LogIn.name,
         builder: () => BlocProvider<SignInBloc>(
           create: (_) => SignInBloc.instance(),
           child: log_in.LogInView(),
@@ -77,9 +77,9 @@ class AuthorizationValidation extends QMiddleware {
     final isSignedIn = bloc?.isSignedIn ?? false;
     
     if (authenticated && !isSignedIn) {
-      unawaited(AppNavigator().go('/${RouteName.logIn}'));
+      unawaited(AppRouting().go(RouteName.LogIn.path));
     } else if (!authenticated && isSignedIn) {
-      unawaited(AppNavigator().go('/${RouteName.dashboard}'));
+      unawaited(AppRouting().go(RouteName.Dashboard.path));
     }
   }
 }

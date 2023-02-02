@@ -42,9 +42,9 @@ class _BoilerplateWebAppState extends State<BoilerplateWebApp> {
         listener: (_, state) {
           log.info('Session State >> $state');
           if (state is SessionLogOutSuccess) {
-            AppNavigator().goWithName(RouteName.logIn);
+            AppRouting().pushReplacementNamed(RouteName.LogIn.name);
           } else if (state is SessionLoadSuccess) {
-            AppNavigator().go('/${RouteName.dashboard}');
+            AppRouting().pushReplacementNamed(RouteName.Dashboard.name);
           }
         },
         child: BlocBuilder<LanguageBloc, LanguageState>(

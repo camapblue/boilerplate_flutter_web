@@ -20,5 +20,5 @@ deploy:
 
 run:
 	make setup-env
-	flutter run --dart-define env=$$(echo $$(cat .env | tr '\n' '|')) -d chrome --web-renderer html
+	flutter run --dart-define env=$$(echo $$(cat .env | tr '\n' '|')) -d chrome --web-renderer html --web-port=8080
 	

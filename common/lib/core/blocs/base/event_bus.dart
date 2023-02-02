@@ -19,27 +19,27 @@ class EventBus {
     return _singleton;
   }
 
-  List<BaseBloc> _blocs = [];
+  Map<Key, BaseBloc> _blocs = {};
   List<Broadcast> _broadcasts = [];
 
   List<RetryEvent> _retryEvents = [];
 
   EventBus._internal() {
-    _blocs = [];
+    _blocs = {};
     _broadcasts = [];
     _retryEvents = [];
   }
 
   T newBlocWithConstructor<T extends BaseBloc>(Key key, Function constructor) {
-    final found = _blocs.indexWhere((b) => b.key == key);
-    if (found >= 0 && _blocs[found] is T) {
-      return _blocs[found] as T;
+    final found = _blocs[key];
+    if (found != null && found is T) {
+      return found;
     }
 
     try {
       final T newInstance = constructor();
       log.trace('New Bloc is created with key = $key');
-      _blocs.add(newInstance);
+      _blocs[key] = newInstance;
       if (newInstance.subscribes().isNotEmpty) {
         _broadcasts.addAll(newInstance.subscribes());
       }
@@ -52,9 +52,9 @@ class EventBus {
   }
 
   T? blocFromKey<T extends BaseBloc>(Key key) {
-    final found = _blocs.indexWhere((b) => b.key == key);
-    if (found >= 0 && _blocs[found] is T) {
-      return _blocs[found] as T;
+    final found = _blocs[key];
+    if (found != null && found is T) {
+      return found;
     }
     return null;
   }
@@ -62,14 +62,14 @@ class EventBus {
   void event<T extends BaseBloc>(Key key, Object event,
       {bool retryLater = false, Duration? delay}) {
     try {
-      final found = _blocs.indexWhere((b) => b.key == key);
-      if (found >= 0 && _blocs[found] is T) {
+      final found = _blocs[key];
+      if (found != null && found is T) {
         if (delay != null) {
           Future.delayed(delay, () {
-            _blocs[found].add(event);
+            found.add(event);
           });
         } else {
-          _blocs[found].add(event);
+          found.add(event);
         }
       } else {
         if (retryLater) {
@@ -96,9 +96,11 @@ class EventBus {
   }
 
   void unhandle(Key blocKey) {
-    _blocs.removeWhere((b) {
-      return b.key == blocKey || b.closeWithBlocKey == blocKey;
-    });
+    for (final b in _blocs.entries) {
+      if (b.key == blocKey || b.value.closeWithBlocKey == blocKey) {
+        _blocs.remove(blocKey);
+      }
+    }
   }
 
   void _retryEvent<T extends BaseBloc>(Key key) {
@@ -116,14 +118,13 @@ class EventBus {
   void cleanUp({Key? parentKey}) {
     final removedKeys = <Key>[];
     final closeKey = parentKey ?? const ValueKey('none_dispose_bloc');
-    _blocs.removeWhere((b) {
-      if (b.closeWithBlocKey == closeKey) {
+    for (final b in _blocs.entries) {
+      if (b.value.closeWithBlocKey == closeKey) {
         removedKeys.add(b.key);
-        return true;
+        _blocs.remove(closeKey);
       }
-      return false;
-    });
-
+    }
+    
     _broadcasts.removeWhere((b) {
       return removedKeys.contains(b.blocKey);
     });

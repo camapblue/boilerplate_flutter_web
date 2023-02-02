@@ -47,7 +47,7 @@ class _DashboardViewState extends XResponsiveTemplateWidget<DashboardView> {
       body: AnimatedBuilder(
         animation: _selectMenuNotifier,
         builder: (_, __) {
-          AppNavigator().back();
+          AppRouting().goBack();
           return _selectMenuNotifier.value;
         },
       ),
