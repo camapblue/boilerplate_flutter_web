@@ -76,7 +76,6 @@ class SessionBloc extends BaseBloc<SessionEvent, SessionState>
     
     try {
         final loggedInUser = await userService.getUserProfile();
-
         emit(
           SessionUserLogInSuccess(
             user: loggedInUser,

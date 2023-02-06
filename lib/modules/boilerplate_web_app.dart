@@ -32,7 +32,7 @@ class _BoilerplateWebAppState extends State<BoilerplateWebApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<SessionBloc>(
-          create: (_) => SessionBloc.instance()..start(),
+          create: (_) => SessionBloc.instance(),
         ),
         BlocProvider<LanguageBloc>(
           create: (_) => LanguageBloc.instance(),
@@ -43,8 +43,6 @@ class _BoilerplateWebAppState extends State<BoilerplateWebApp> {
           log.info('Session State >> $state');
           if (state is SessionSignOutSuccess) {
             AppRouting().pushReplacementNamed(RouteName.LogIn.name);
-          } else if (state is SessionUserLogInSuccess) {
-            AppRouting().pushReplacementNamed(RouteName.Dashboard.name);
           }
         },
         child: BlocBuilder<LanguageBloc, LanguageState>(
@@ -53,6 +51,8 @@ class _BoilerplateWebAppState extends State<BoilerplateWebApp> {
               routeInformationParser: const QRouteInformationParser(),
               routerDelegate: QRouterDelegate(
                 AppRouter.allRoutes(),
+                navKey: AppRouting().navigatorKey,
+                initPath: RouteName.main,
                 observers: [
                   AppRouteObserver(),
                   BotToastNavigatorObserver(),

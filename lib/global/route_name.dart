@@ -6,7 +6,6 @@ class RouteName {
   static _LogIn get LogIn => _LogIn();
 
   static _Dashboard get Dashboard => _Dashboard();
-
 }
 
 class _LogIn {

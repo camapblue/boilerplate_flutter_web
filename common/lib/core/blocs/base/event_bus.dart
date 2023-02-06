@@ -101,13 +101,17 @@ class EventBus {
   }
 
   void _retryEvent<T extends BaseBloc>(Key key) {
+    int found = -1;
     for (var i = 0; i < _retryEvents.length; i++) {
       final retry = _retryEvents[i];
       if (retry.key == key) {
         event<T>(retry.key, retry.event);
-        _retryEvents.removeAt(i);
+        found = i;
         break;
       }
+    }
+    if (found >= 0) {
+      _retryEvents.removeAt(found);
     }
   }
 
