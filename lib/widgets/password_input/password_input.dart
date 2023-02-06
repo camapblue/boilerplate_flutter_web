@@ -215,7 +215,7 @@ class _PasswordInputState extends State<PasswordInput> {
                 const EdgeInsets.only(
                   left: 16,
                   right: 16,
-                  top: 14,
+                  top: 10,
                   bottom: 14,
                 ),
             isCollapsed: true,

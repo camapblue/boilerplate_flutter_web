@@ -1,112 +1,115 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:boilerplate_flutter_web/blocs/blocs.dart';
+import 'package:boilerplate_flutter_web/blocs/mixin/mixin.dart';
 import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:boilerplate_flutter_web/global/global.dart';
-import 'package:boilerplate_flutter_web/modules/user_list/user_list_view.dart';
+import 'package:boilerplate_flutter_web/modules/common/breadcrumb/breadcrumb.dart';
 import 'package:boilerplate_flutter_web/widgets/widgets.dart';
 import 'package:common/core/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 
-part 'user_info_widget.dart';
 part 'menu_item_widget.dart';
+part 'main_menu.dart';
 
 class DashboardView extends StatefulWidget {
-  const DashboardView({Key? key}) : super(key: key);
+  final Widget child;
+  const DashboardView(this.child, {Key? key}) : super(key: key);
 
   @override
   State<DashboardView> createState() => _DashboardViewState();
 }
 
-class _DashboardViewState extends XResponsiveTemplateWidget<DashboardView> {
-  late ValueNotifier<Widget> _selectMenuNotifier;
-  int _currentSelectedIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectMenuNotifier = ValueNotifier(
-      const UserListView(),
-    );
-  }
-
-  @override
-  void dispose() {
-    _selectMenuNotifier.dispose();
-    super.dispose();
-  }
-
+class _DashboardViewState extends XResponsiveTemplateWidget<DashboardView>
+    with SessionData {
   @override
   Widget mobileLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const XText.titleLarge('Dashboard'),
       ),
-      drawer: Drawer(
-        backgroundColor: context.primaryColor,
-        child: _menuItemWidget(shouldPop: true),
-      ),
-      body: AnimatedBuilder(
-        animation: _selectMenuNotifier,
-        builder: (_, __) {
-          AppRouting().goBack();
-          return _selectMenuNotifier.value;
-        },
+      body: const Center(
+        child: XText.titleMedium('Not support mobile layout'),
       ),
     );
   }
 
   @override
   Widget webLayout(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _selectMenuNotifier,
-      builder: (_, __) {
-        return Row(
-          children: [
-            Container(
-              height: double.infinity,
-              width: 250.0,
-              color: context.primaryColor,
-              child: _menuItemWidget(),
-            ),
-            Expanded(child: _selectMenuNotifier.value),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _menuItemWidget({bool shouldPop = false}) {
-    return Column(
+    return Row(
       children: [
-        const SizedBox(height: 24.0),
-        const UserInfoWidget(),
-        const SizedBox(height: 24.0),
-        MenuItemWidget(
-          title: 'Dashboard',
-          isFirst: true,
-          isParent: true,
-          isSelected: _currentSelectedIndex == 0,
-          onTap: () {
-            _currentSelectedIndex = 0;
-            shouldPop ? Navigator.pop(context) : null;
-            _selectMenuNotifier.value = const UserListView();
-          },
-        ),
-        const Spacer(),
-        MenuItemWidget(
-          title: 'Log Out',
-          icon: const Icon(
-            Icons.logout,
+        Container(
+          height: double.infinity,
+          width: 280.0,
+          decoration: const BoxDecoration(
             color: Colors.white,
-            size: 20,
           ),
-          isParent: false,
-          isSelected: false,
-          onTap: () {
-            EventBus().event<SessionBloc>(
-              Keys.Blocs.sessionBloc,
-              const SessionLoggedOut(),
-            );
-          },
+          child: const MainMenu(),
+        ),
+        Expanded(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 20,
+                ),
+                child: Row(
+                  children: [
+                    BlocBuilder<SessionBloc, SessionState>(
+                      buildWhen: (_, current) =>
+                          current is SessionUserLogInSuccess,
+                      builder: (_, state) {
+                        return XText.titleLarge(
+                          'Hi ${state.loggedInUser?.name ?? ''}',
+                        );
+                      },
+                    ),
+                    const Spacer(),
+                    const Icon(Icons.search),
+                    const SizedBox(width: 12),
+                    const Icon(Icons.notifications),
+                    const SizedBox(width: 12),
+                    const CircleAvatar(
+                      minRadius: 16,
+                      backgroundImage: NetworkImage(
+                        AppConstants.DefaultUserIconUrl,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: context.backgroundSubdued,
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          child: const Breadcrumb(),
+                        ),
+                        Divider(
+                          color: context.borderColor,
+                          height: 2,
+                          thickness: 2,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: Container(
+                              key: AppRouting().dashboardContentKeyForRender(),
+                              child: widget.child,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ],
     );

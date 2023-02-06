@@ -97,6 +97,8 @@ class SessionBloc extends BaseBloc<SessionEvent, SessionState>
     }
 
     try {
+      await userService.logOut();
+
       emit(SessionSignOutSuccess());
     } on Exception catch (e) {
       handleException(e);

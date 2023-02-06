@@ -6,6 +6,10 @@ class RouteName {
   static _LogIn get LogIn => _LogIn();
 
   static _Dashboard get Dashboard => _Dashboard();
+
+  static _Users get Users => _Users();
+
+  static _Settings get Settings => _Settings();
 }
 
 class _LogIn {
@@ -16,4 +20,18 @@ class _LogIn {
 class _Dashboard {
   String get path => '/dashboard';
   String get name => 'dashboard';
+}
+
+class _Users {
+  String get path => '/users';
+  String get name => 'users';
+
+  String get fullPath => '${RouteName.Dashboard.path}/users';
+}
+
+class _Settings {
+  String get path => '/settings';
+  String get name => 'settings';
+
+  String get fullPath => '${RouteName.Dashboard.path}/settings';
 }

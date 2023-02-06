@@ -31,6 +31,9 @@ class _Blocs {
 
   // List
   final Key userListBloc = const Key('user_list_bloc');
+
+  // Breadcrumb
+  final Key breadcrumbBloc = const Key('breadcrumb_bloc');
 }
 
 class _Broadcast {

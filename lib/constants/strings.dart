@@ -10,6 +10,8 @@ class Strings {
   static _LogIn get LogIn => _LogIn();
 
   static _Home get Home => _Home();
+
+  static _Dashboard get Dashboard => _Dashboard();
 }
 
 // Common for some test really commonly that can be used in many apps
@@ -52,3 +54,9 @@ class _LogIn {
   final String errorWrongPassword = 'log_in.error.email_wrong_password';
 }
 
+class _Dashboard {
+  final mainMenuUsers = 'User List';
+  final mainMenuSettings = 'Settings';
+  
+  final noUsers = 'No users';
+}

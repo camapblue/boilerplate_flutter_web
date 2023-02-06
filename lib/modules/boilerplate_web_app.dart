@@ -36,7 +36,12 @@ class _BoilerplateWebAppState extends State<BoilerplateWebApp> {
         ),
         BlocProvider<LanguageBloc>(
           create: (_) => LanguageBloc.instance(),
-        )
+        ),
+        BlocProvider<BreadcrumbBloc>(
+          create: (_) => BreadcrumbBloc.instance(
+            root: AppConstants.dashboardBreadCrumbRoot,
+          ),
+        ),
       ],
       child: BlocListener<SessionBloc, SessionState>(
         listener: (_, state) {

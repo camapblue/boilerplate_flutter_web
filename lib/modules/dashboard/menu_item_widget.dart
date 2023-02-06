@@ -6,7 +6,7 @@ class MenuItemWidget extends StatelessWidget {
   final GestureTapCallback? onTap;
   final bool? isFirst;
   final bool isSelected;
-  final bool isParent;
+  final TextStyle? titleStyle;
 
   const MenuItemWidget({
     Key? key,
@@ -15,46 +15,48 @@ class MenuItemWidget extends StatelessWidget {
     this.icon,
     this.onTap,
     this.isSelected = false,
-    this.isParent = false,
+    this.titleStyle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.black12 : Colors.transparent,
-          border: Border(
-            top: (isFirst ?? false)
-                ? BorderSide(color: Colors.white.withOpacity(.1))
-                : BorderSide.none,
-            bottom: BorderSide(color: Colors.white.withOpacity(.1)),
-            left: BorderSide(
-              color: isSelected && isParent ? Colors.white : Colors.transparent,
-              width: 5.0,
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Material(
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: isSelected ? context.primarySubdued : Colors.transparent,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  icon ?? const SizedBox(),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: XText.headlineSmall(
+                      title ?? '',
+                      style: titleStyle ??
+                          context.headlineSmall?.copyWith(
+                            color: isSelected
+                                ? context.textColor
+                                : context.disabledColor,
+                          ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 18.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            icon ?? const Icon(
-              Icons.dashboard,
-              color: Colors.white,
-              size: 20,
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: XText(
-                title ?? '',
-                style: context.bodyMedium?.copyWith(color: Colors.white),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            )
-          ],
         ),
       ),
     );

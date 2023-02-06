@@ -4,14 +4,19 @@ import 'dart:async';
 
 import 'package:boilerplate_flutter_web/blocs/blocs.dart';
 import 'package:boilerplate_flutter_web/global/global.dart';
+import 'package:boilerplate_flutter_web/models/models.dart';
 import 'package:common/core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 
 import 'log_in/log_in_view.dart' deferred as log_in;
 import 'dashboard/dashboard_view.dart' deferred as dashboard;
+import 'user_list/user_list_view.dart' deferred as user_list;
+import 'settings/settings_view.dart' deferred as settings;
 import 'error/error_view.dart' deferred as error;
 import 'splash/splash_view.dart' deferred as splash;
+
+import 'breadcrumb_pages.dart';
 
 class AppRouter {
   static void initialize() {
@@ -37,18 +42,47 @@ class AppRouter {
         builder: () => splash.SplashView(),
         middleware: [DeferredLoader(splash.loadLibrary)],
       ),
-      QRoute(
+      QRoute.withChild(
         path: RouteName.Dashboard.path,
         name: RouteName.Dashboard.name,
-        builder: () => MultiBlocProvider(
-          providers: [
-            Provider().BlocProvider.userList(Keys.Blocs.userListBloc),
-          ],
-          child: dashboard.DashboardView(),
-        ),
+        initRoute: RouteName.Users.name,
+        builderChild: (child) => dashboard.DashboardView(child),
         middleware: [
           DeferredLoader(dashboard.loadLibrary),
           AuthorizationValidation(true),
+        ],
+        children: [
+          QRoute(
+            path: RouteName.Users.path,
+            name: RouteName.Users.name,
+            builder: () {
+              return MultiBlocProvider(
+                providers: [
+                  Provider().BlocProvider.userList(Keys.Blocs.userListBloc),
+                ],
+                child: user_list.UserListView(),
+              );
+            },
+            middleware: [
+              DeferredLoader(user_list.loadLibrary),
+              BreadcrumbHandler(
+                page: BreadcrumbPages.users,
+              ),
+            ],
+          ),
+          QRoute(
+            path: RouteName.Settings.path,
+            name: RouteName.Settings.name,
+            builder: () {
+              return settings.SettingsView();
+            },
+            middleware: [
+              DeferredLoader(settings.loadLibrary),
+              BreadcrumbHandler(
+                page: BreadcrumbPages.settings,
+              ),
+            ],
+          ),
         ],
       ),
       QRoute(
@@ -75,11 +109,41 @@ class AuthorizationValidation extends QMiddleware {
   Future onEnter() async {
     final bloc = EventBus().blocFromKey<SessionBloc>(Keys.Blocs.sessionBloc);
     final isSignedIn = bloc?.isSignedIn ?? false;
-    
+
     if (authenticated && !isSignedIn) {
       unawaited(AppRouting().go(RouteName.LogIn.path));
     } else if (!authenticated && isSignedIn) {
       unawaited(AppRouting().go(RouteName.Dashboard.path));
     }
+  }
+}
+
+class BreadcrumbHandler extends QMiddleware {
+  final BreadcrumbPages page;
+
+  BreadcrumbHandler({
+    required this.page,
+  });
+
+  @override
+  Future onEnter() async {
+    var pages = <BreadcrumbPage>[];
+
+    switch (page) {
+      case BreadcrumbPages.users:
+        pages = [BreadcrumbPages.users.build()];
+        break;
+      case BreadcrumbPages.settings:
+        pages = [
+          BreadcrumbPages.settings.build(),
+        ];
+        break;
+    }
+
+    EventBus().event<BreadcrumbBloc>(
+      Keys.Blocs.breadcrumbBloc,
+      BreadcrumbSet(pages),
+      retryLater: true,
+    );
   }
 }
