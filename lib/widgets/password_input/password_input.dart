@@ -2,7 +2,6 @@ import 'package:flutter/services.dart';
 import 'package:boilerplate_flutter_web/constants/constants.dart';
 import 'package:boilerplate_flutter_web/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:common/extension/string_extension.dart';
 
 class PasswordInput extends StatefulWidget {
   final String? title;
@@ -158,8 +157,7 @@ class _PasswordInputState extends State<PasswordInput> {
   void didUpdateWidget(covariant PasswordInput oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.errorMessage != widget.errorMessage &&
-        widget.errorMessage.isNotNullOrEmpty()) {
+    if (oldWidget.errorMessage != widget.errorMessage) {
       _errorMessage = widget.errorMessage ?? '';
     }
   }

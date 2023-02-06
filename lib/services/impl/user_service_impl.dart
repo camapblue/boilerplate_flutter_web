@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:boilerplate_flutter_web/services/exceptions/exceptions.dart';
 import 'package:boilerplate_flutter_web/services/services.dart';
 import 'package:repository/repository.dart';
 import 'package:repository/repository/repository.dart';
@@ -12,7 +13,15 @@ class UserServiceImpl implements UserService {
   });
 
   @override
-  Future<User> logIn() async {
+  Future<User> logIn({required String email, required String password}) async {
+    if (email != 'admin@boilerplate.com') {
+      throw AuthWrongEmailException('Wrong email');
+    }
+
+    if (password != 'password') {
+      throw AuthWrongPasswordException('Wrong password');
+    }
+
     final user = await userRepository.logIn();
     Repository().accessToken = 'access_token_here';
 

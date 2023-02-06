@@ -158,15 +158,15 @@ class _ValidatorInputState extends State<ValidatorInput> {
     );
   }
 
-  @override
+   @override
   void didUpdateWidget(covariant ValidatorInput oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.errorMessage != widget.errorMessage &&
-            widget.errorMessage.isNotNullOrEmpty() ||
-        oldWidget.initialValue != widget.initialValue &&
-            widget.initialValue.isNotNullOrEmpty()) {
+    if (oldWidget.errorMessage != widget.errorMessage) {
       _errorMessage = widget.errorMessage ?? '';
+    }
+    if (oldWidget.initialValue != widget.initialValue &&
+        widget.initialValue.isNotNullOrEmpty()) {
       _controller.text = widget.initialValue;
     }
   }

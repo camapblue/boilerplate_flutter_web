@@ -1,7 +1,7 @@
 import 'package:repository/repository.dart';
 
 abstract class UserService {
-  Future<User> logIn();
+  Future<User> logIn({required String email, required String password});
 
   Future<User> getUserProfile();
 

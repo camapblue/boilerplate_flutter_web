@@ -28,11 +28,26 @@ class _LogInViewState extends XResponsiveTemplateWidget<LogInView> {
       child: BlocListener<SessionBloc, SessionState>(
         listener: (_, state) {
           if (state is SessionUserLogInSuccess) {
-            AppRouting().pushReplacementNamed(RouteName.Dashboard.name);
+            AppRouting().goToName(RouteName.Dashboard.name);
           } else if (state is SessionLoadFailure) {}
         },
         child: BlocConsumer<SignInBloc, SignInState>(listener: (_, state) {
-          
+          if (state is SignInFailure) {
+            if (state.error == SignInError.wrongEmail ||
+                state.error == SignInError.notFoundUserByEmail) {
+              setState(() {
+                _emailErrorMessage =
+                    context.translate(Strings.LogIn.errorEmailNotFound);
+                _passwordErrorMessage = null;
+              });
+            } else if (state.error == SignInError.wrongPassword) {
+              setState(() {
+                _passwordErrorMessage =
+                    context.translate(Strings.LogIn.errorWrongPassword);
+                _emailErrorMessage = null;
+              });
+            }
+          }
         }, builder: (_, state) {
           final loading = state is SignInRequestInProgress;
           return Column(
@@ -75,6 +90,7 @@ class _LogInViewState extends XResponsiveTemplateWidget<LogInView> {
                   ),
                 ],
               ),
+              const SizedBox(height: 8,),
               PasswordInput(
                 title: context.translate(Strings.LogIn.passwordTitle),
                 placeholder: context.translate(

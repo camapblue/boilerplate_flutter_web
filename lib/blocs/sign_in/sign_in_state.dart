@@ -1,5 +1,7 @@
 part of 'sign_in_bloc.dart';
 
+enum SignInError { wrongEmail, wrongPassword, notFoundUserByEmail, unknown }
+
 abstract class SignInState extends Equatable {
   final String? message;
 
@@ -17,7 +19,9 @@ class SignInRequestInProgress extends SignInState {
 }
 
 class SignInFailure extends SignInState {
-  const SignInFailure(String message) : super(message: message);
+  final SignInError error;
+
+  const SignInFailure({this.error = SignInError.unknown});
 }
 
 class SignInSuccess extends SignInState {

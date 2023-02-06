@@ -1,15 +1,19 @@
 import 'package:boilerplate_flutter_web/blocs/blocs.dart';
+import 'package:boilerplate_flutter_web/blocs/mixin/mixin.dart';
 import 'package:boilerplate_flutter_web/global/global.dart';
+import 'package:boilerplate_flutter_web/services/exceptions/exceptions.dart';
 import 'package:boilerplate_flutter_web/services/services.dart';
 import 'package:common/core/core.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:repository/repository.dart';
 
 part 'sign_in_event.dart';
 part 'sign_in_state.dart';
 
-class SignInBloc extends BaseBloc<SignInEvent, SignInState> {
+class SignInBloc extends BaseBloc<SignInEvent, SignInState>
+    with ExceptionHandler {
   final UserService userService;
 
   SignInBloc(Key key, {required this.userService})
@@ -46,12 +50,28 @@ class SignInBloc extends BaseBloc<SignInEvent, SignInState> {
       SignInFormSubmitted event, Emitter<SignInState> emit) async {
     emit(const SignInRequestInProgress());
     try {
-      await userService.logIn();
-      emit(const SignInSuccess('Sign In Successfully!'));
+      await Future.delayed(const Duration(seconds: 3));
 
-      EventBus().broadcast(Keys.Broadcast.signInSuccess);
+      final user =
+          await userService.logIn(email: event.email, password: event.password);
+
+      EventBus().broadcast(
+        Keys.Broadcast.signInSuccess,
+        params: {'user': user},
+      );
+
+      emit(const SignInSuccess('Sign In Successfully!'));
     } catch (e) {
-      emit(const SignInFailure('Invalid email or password. Please try again.'));
+      if (e is AuthWrongEmailException) {
+        emit(const SignInFailure(error: SignInError.wrongEmail));
+      } else if (e is AuthWrongPasswordException) {
+        emit(const SignInFailure(error: SignInError.wrongPassword));
+      } else if (e is UnauthorisedException) {
+        emit(const SignInFailure(error: SignInError.notFoundUserByEmail));
+      } else {
+        handleException(e as Exception);
+        emit(const SignInFailure());
+      }
     }
   }
 
