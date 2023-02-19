@@ -34,6 +34,9 @@ class _Blocs {
 
   // Breadcrumb
   final Key breadcrumbBloc = const Key('breadcrumb_bloc');
+
+  // User detail
+  Key userDetailBloc(String userId) => Key('user_detail_bloc_$userId');
 }
 
 class _Broadcast {
@@ -47,4 +50,6 @@ class _Broadcast {
 
   final String signInSuccess = 'sign_in_success_broadcast';
   final String signOutSuccess = 'sign_out_success_broadcast';
+
+  final String userDetailsUpdated = 'user_details_updated';
 }

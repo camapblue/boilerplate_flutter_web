@@ -10,6 +10,8 @@ class RouteName {
   static _Users get Users => _Users();
 
   static _Settings get Settings => _Settings();
+
+  static _UserDetail get UserDetail => _UserDetail();
 }
 
 class _LogIn {
@@ -34,4 +36,11 @@ class _Settings {
   String get name => 'settings';
 
   String get fullPath => '${RouteName.Dashboard.path}/settings';
+}
+
+class _UserDetail {
+  String get path => '/:userId/detail';
+  String get name => 'detail';
+
+  String fullPath(String userId) => '${RouteName.Dashboard.path}/users/$userId/detail';
 }

@@ -47,4 +47,14 @@ class UserServiceImpl implements UserService {
   bool get isLoggedIn {
     return userRepository.isSignedIn();
   }
+
+  @override
+  Future<User> getUserDetails(String userId) async {
+    return User(
+      id: userId,
+      email: 'abc@abc.com',
+      name: 'Name',
+      role: AdminRole.employee,
+    );
+  }
 }

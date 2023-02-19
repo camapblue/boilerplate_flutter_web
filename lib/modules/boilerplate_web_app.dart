@@ -47,7 +47,7 @@ class _BoilerplateWebAppState extends State<BoilerplateWebApp> {
         listener: (_, state) {
           log.info('Session State >> $state');
           if (state is SessionSignOutSuccess) {
-            AppRouting().pushReplacementNamed(RouteName.LogIn.name);
+            AppRouting().goToName(RouteName.LogIn.name);
           }
         },
         child: BlocBuilder<LanguageBloc, LanguageState>(

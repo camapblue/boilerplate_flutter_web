@@ -14,7 +14,7 @@ part 'session_event.dart';
 part 'session_state.dart';
 
 class SessionBloc extends BaseBloc<SessionEvent, SessionState>
-    with ExceptionHandler {
+    with ExceptionHandler, Loader {
   final UserService userService;
 
   SessionBloc(
@@ -52,8 +52,7 @@ class SessionBloc extends BaseBloc<SessionEvent, SessionState>
     ];
   }
 
-  bool get isSignedIn =>
-      userService.isLoggedIn;
+  bool get isSignedIn => userService.isLoggedIn;
 
   void start() {
     if (state is SessionInitial) {
@@ -73,21 +72,25 @@ class SessionBloc extends BaseBloc<SessionEvent, SessionState>
   Future<void> _onSessionLoaded(
       SessionLoaded event, Emitter<SessionState> emit) async {
     emit(SessionLoadInProgress());
-    
+
     try {
-        final loggedInUser = await userService.getUserProfile();
-        emit(
-          SessionUserLogInSuccess(
-            user: loggedInUser,
-          ),
-        );
-      } catch (e) {
-        if (e is UnauthorisedException) {
-          emit(SessionSignOutSuccess());
-        } else {
-          emit(SessionLoadFailure());
-        }
+      if (!isSignedIn) {
+        emit(SessionInitial());
+        return;
+      } 
+      final loggedInUser = await userService.getUserProfile();
+      emit(
+        SessionUserLogInSuccess(
+          user: loggedInUser,
+        ),
+      );
+    } catch (e) {
+      if (e is UnauthorisedException) {
+        emit(SessionSignOutSuccess());
+      } else {
+        emit(SessionLoadFailure());
       }
+    }
   }
 
   Future<void> _onSessionLoggedOut(
@@ -96,12 +99,17 @@ class SessionBloc extends BaseBloc<SessionEvent, SessionState>
       return;
     }
 
+    showGlobalLoading();
+
     try {
+      await Future.delayed(const Duration(seconds: 3));
       await userService.logOut();
 
       emit(SessionSignOutSuccess());
     } on Exception catch (e) {
       handleException(e);
+    } finally {
+      hideGlobalLoading();
     }
   }
 }

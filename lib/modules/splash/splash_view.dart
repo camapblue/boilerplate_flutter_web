@@ -39,6 +39,7 @@ class _SplashViewState extends XResponsiveTemplateWidget<SplashView> {
   @override
   Widget webLayout(BuildContext context) {
     return BlocListener<SessionBloc, SessionState>(
+      listenWhen: (previous, current) => current is! SessionLoadInProgress,
       listener: (_, state) {
         AppRouting().go(state.loggedInUser != null
             ? RouteName.Dashboard.path

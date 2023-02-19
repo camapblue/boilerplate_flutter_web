@@ -44,7 +44,8 @@ class AppRouting {
   }
 
   Future<void> go(String path) {
-    return QR.to(path);
+    final currentPath = QR.currentPath;
+    return QR.navigator.replace(currentPath, path);
   }
 
   Future<void> goWithHiddenParams(

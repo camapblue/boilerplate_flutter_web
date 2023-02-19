@@ -8,4 +8,6 @@ abstract class UserService {
   Future<void> logOut();
 
   bool get isLoggedIn;
+
+  Future<User> getUserDetails(String userId);
 }

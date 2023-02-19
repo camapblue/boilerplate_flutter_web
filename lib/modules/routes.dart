@@ -8,10 +8,12 @@ import 'package:boilerplate_flutter_web/models/models.dart';
 import 'package:common/core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qlevar_router/qlevar_router.dart';
+import 'package:repository/model/model.dart';
 
 import 'log_in/log_in_view.dart' deferred as log_in;
 import 'dashboard/dashboard_view.dart' deferred as dashboard;
 import 'user_list/user_list_view.dart' deferred as user_list;
+import 'user_detail/user_detail_view.dart' deferred as user_detail;
 import 'settings/settings_view.dart' deferred as settings;
 import 'error/error_view.dart' deferred as error;
 import 'splash/splash_view.dart' deferred as splash;
@@ -52,24 +54,55 @@ class AppRouter {
           AuthorizationValidation(true),
         ],
         children: [
-          QRoute(
-            path: RouteName.Users.path,
-            name: RouteName.Users.name,
-            builder: () {
-              return MultiBlocProvider(
-                providers: [
-                  Provider().BlocProvider.userList(Keys.Blocs.userListBloc),
-                ],
-                child: user_list.UserListView(),
-              );
-            },
-            middleware: [
-              DeferredLoader(user_list.loadLibrary),
-              BreadcrumbHandler(
-                page: BreadcrumbPages.users,
-              ),
-            ],
-          ),
+          QRoute.withChild(
+              path: RouteName.Users.path,
+              name: RouteName.Users.name,
+              builderChild: (child) {
+                return child;
+              },
+              children: [
+                QRoute(
+                  path: '/',
+                  builder: () {
+                    return MultiBlocProvider(
+                      providers: [
+                        Provider()
+                            .BlocProvider
+                            .userList(Keys.Blocs.userListBloc),
+                      ],
+                      child: user_list.UserListView(),
+                    );
+                  },
+                  middleware: [
+                    DeferredLoader(user_list.loadLibrary),
+                    BreadcrumbHandler(
+                      page: BreadcrumbPages.users,
+                    ),
+                  ],
+                ),
+                QRoute(
+                  path: RouteName.UserDetail.path,
+                  name: RouteName.UserDetail.name,
+                  builder: () {
+                    final user = QR.params['user']?.valueAs<User>();
+                    final userId = QR.params['userId'].toString();
+
+                    return BlocProvider<UserDetailsBloc>(
+                      create: (_) => UserDetailsBloc.instance(userId),
+                      child: user_detail.UserDetailView(
+                        user: user,
+                        userId: userId,
+                      ),
+                    );
+                  },
+                  middleware: [
+                    DeferredLoader(user_detail.loadLibrary),
+                    BreadcrumbHandler(
+                      page: BreadcrumbPages.userDetail,
+                    ),
+                  ],
+                ),
+              ]),
           QRoute(
             path: RouteName.Settings.path,
             name: RouteName.Settings.name,
@@ -136,6 +169,15 @@ class BreadcrumbHandler extends QMiddleware {
       case BreadcrumbPages.settings:
         pages = [
           BreadcrumbPages.settings.build(),
+        ];
+        break;
+      case BreadcrumbPages.userDetail:
+        final user = QR.params['user']?.valueAs<User>();
+        final userId = QR.params['userId'].toString();
+        pages = [
+          BreadcrumbPages.users.build(),
+          BreadcrumbPages.userDetail
+              .build(data: {'userId': userId, 'user': user}),
         ];
         break;
     }
